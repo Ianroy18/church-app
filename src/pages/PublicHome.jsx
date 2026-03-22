@@ -115,7 +115,7 @@ function PublicHome() {
             <div className="cards-grid">
               <div className="card scroll-reveal group border-none shadow-none bg-transparent h-full">
                 <div className="card-img-wrapper rounded-[30px] shadow-lg mb-6 group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative aspect-square">
-                   <img src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1456105935968197" alt="Worship" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                   <img src="/images/worship.png" alt="Worship" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                    <div className="absolute bottom-6 left-6 right-6 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white transform group-hover:-translate-y-2 transition-transform">
                       <h4 className="font-bold uppercase tracking-widest text-[10px]">Weekly Gathering</h4>
@@ -126,7 +126,7 @@ function PublicHome() {
 
               <div className="card scroll-reveal group border-none shadow-none bg-transparent h-full" style={{ transitionDelay: '150ms' }}>
                 <div className="card-img-wrapper rounded-[30px] shadow-lg mb-6 group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative aspect-square">
-                   <img src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1317182853788107" alt="Outreach" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                   <img src="/images/outreach.png" alt="Outreach" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                    <div className="absolute bottom-6 left-6 right-6 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white transform group-hover:-translate-y-2 transition-transform">
                       <h4 className="font-bold uppercase tracking-widest text-[10px]">Civic Spirit</h4>
