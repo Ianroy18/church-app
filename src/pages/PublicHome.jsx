@@ -176,7 +176,7 @@ function PublicHome() {
                     <FacebookIcon size={18} /> /LifeCareCenterCDO
                   </a>
                   <a href="#" className="text-slate-400 hover:text-[#FF0000] flex items-center justify-center md:justify-start gap-3 text-xs font-bold tracking-tighter uppercase transition-colors">
-                    <YoutubeIcon size={18} /> /CCFmainTV
+                    <YoutubeIcon size={18} /> /LifeCareCenterCDOmainTV
                   </a>
                   <a href="#" className="text-slate-400 hover:text-[#E4405F] flex items-center justify-center md:justify-start gap-3 text-xs font-bold tracking-tighter uppercase transition-colors">
                     <InstagramIcon size={18} /> @lifecarecentercdo
@@ -206,7 +206,7 @@ function PublicHome() {
           <Separator className="bg-white/5 mb-12" />
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-slate-600 text-[10px] font-black tracking-[0.4em] uppercase italic text-center">
-            <p>Christ's Commission Fellowship &copy; 2026</p>
+            <p>Grace and Truth Life Care Centre Inc. &copy; 2026</p>
             <p className="text-white/20 hover:text-[#4CAF50] transition-colors cursor-default tracking-[1em]">Excellence</p>
           </div>
         </div>
