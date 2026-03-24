@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import PublicHome from './pages/PublicHome';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import StudentDashboard from './pages/StudentDashboard';
-import AdminDashboard from './pages/AdminDashboard';
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
+
+// Pages imports - Updated paths
+import PublicHome from './pages/PublicHome';
+import Login from './pages/auth/Login';
+import Register from './pages/Register';
+import StudentDashboard from './pages/StudentDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -13,7 +15,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Demo Mode Bypass
+    // Check Demo Mode
     const demo = localStorage.getItem('demoUser');
     if (demo) {
       const dUser = JSON.parse(demo);
@@ -23,7 +25,7 @@ function App() {
       return;
     }
 
-    // Check current session on load
+    // Initial session check
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         setUser(session.user);
@@ -32,7 +34,7 @@ function App() {
       setLoading(false);
     });
 
-    // Listen for auth changes
+    // Auth listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
         setUser(session.user);
@@ -84,18 +86,20 @@ function App() {
         <Route path="/" element={<PublicHome />} />
         <Route path="/login" element={<Login user={user} role={role} />} />
         <Route path="/register" element={<Register user={user} role={role} />} />
-        
+
         <Route path="/dashboard" element={
           <ProtectedRoute requireStudent={true}>
             <StudentDashboard user={user} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/admin" element={
           <ProtectedRoute requireAdmin={true}>
             <AdminDashboard user={user} />
           </ProtectedRoute>
         } />
+
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );

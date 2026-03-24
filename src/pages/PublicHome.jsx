@@ -1,26 +1,40 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import Navbar from '../components/Navbar';
+
+// Shadcn UI Components
+import { Button } from '../components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Separator } from '../components/ui/separator';
+
+// Lucide Icons
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Play from 'lucide-react/dist/esm/icons/play';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Users from 'lucide-react/dist/esm/icons/users';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Heart from 'lucide-react/dist/esm/icons/heart';
+import Globe from 'lucide-react/dist/esm/icons/globe';
+
+// Custom Social Icons
+const FacebookIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
+);
+
+const YoutubeIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.4 5.58a2.78 2.78 0 0 0 1.94 2c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z" /><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" /></svg>
+);
+
+const InstagramIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
+);
 
 function PublicHome() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   useEffect(() => {
     const revealElements = document.querySelectorAll('.scroll-reveal');
-    const revealOptions = {
-      threshold: 0.15,
-      rootMargin: "0px 0px -50px 0px"
-    };
-
     const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -28,187 +42,176 @@ function PublicHome() {
           observer.unobserve(entry.target);
         }
       });
-    }, revealOptions);
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
     revealElements.forEach(el => revealObserver.observe(el));
-
     return () => revealElements.forEach(el => revealObserver.unobserve(el));
   }, []);
 
-  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
-  const closeMobileMenu = () => setMobileMenuOpen(false);
-
   return (
-    <>
-      <header className={`navbar ${scrolled ? 'scrolled' : ''}`} id="navbar">
-        <div className="nav-container">
-          <div className="logo flex items-center gap-2">
-            <img src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=100066636565507" alt="LCC Logo" className="w-10 h-10 rounded-full border-2 border-[#4CAF50] object-cover" />
-            <span className="font-extrabold tracking-tighter text-white drop-shadow-sm transition-colors duration-300">LCC CDO</span>
-          </div>
-          <nav className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
-            <a href="#about" className="nav-link" onClick={closeMobileMenu}>About</a>
-            <a href="#services" className="nav-link" onClick={closeMobileMenu}>Ministries</a>
-            <a href="#services" className="nav-link" onClick={closeMobileMenu}>Events</a>
-            <a href="#contact" className="nav-link" onClick={closeMobileMenu}>Connect</a>
-            <Link to="/login" className="bg-[#4CAF50] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#388E3C] transition-all ml-4 shadow-sm hover:shadow-[0_10px_20px_rgba(76,175,80,0.3)] hover:-translate-y-1 outline-none text-[13px] uppercase tracking-wider" onClick={closeMobileMenu}>LOGIN FBS</Link>
-          </nav>
-          <div className={`mobile-menu-btn ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-white font-sans selection:bg-[#4CAF50]/30 selection:text-slate-900">
+      <Navbar />
 
       <main>
-        <section className="hero" id="home">
-          <div className="hero-background"></div>
-          <div className="hero-overlay"></div>
-          <div className="hero-content">
-            <h1 className="hero-title">welcome to the family!</h1>
-            <div className="hero-buttons">
-              <Link to="/register" className="btn btn-primary">ENROLL NOW</Link>
-              <a href="#about" className="btn btn-outline">WHO WE ARE</a>
+        {/* --- HERO SECTION (ID: top) --- */}
+        <section id="top" className="relative h-[95vh] flex items-center justify-center overflow-hidden bg-slate-950">
+          <div className="absolute inset-0 z-0">
+            <img
+              src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=2070&auto=format&fit=crop"
+              className="w-full h-full object-cover opacity-40"
+              alt="Worship"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/20 to-slate-950"></div>
+          </div>
+
+          <div className="relative z-10 text-center px-6 max-w-5xl">
+            <Badge variant="outline" className="text-[#4CAF50] border-[#4CAF50] px-4 py-1 tracking-[0.4em] uppercase mb-8">
+              Grace and Truth Life Care Centre
+            </Badge>
+            <h1 className="text-white text-5xl md:text-7xl lg:text-[7.5rem] font-black tracking-tighter leading-[0.9] mb-10 uppercase italic">
+              Know Christ <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/60 to-white/20">And Make Him Known</span>
+            </h1>
+            <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
+              <Button asChild className="bg-[#4CAF50] hover:bg-[#439c47] text-white px-10 py-8 rounded-none font-bold text-xs tracking-[0.2em] transition-all hover:scale-105 shadow-[0_0_40px_rgba(76,175,80,0.3)]">
+                <a href="https://web.facebook.com/LifeCareCenterCDO/videos" target="_blank" rel="noreferrer">
+                  WATCH LATEST MESSAGE <Play className="ml-3 fill-current" size={14} />
+                </a>
+              </Button>
+              <Button variant="ghost" asChild className="text-white hover:text-[#4CAF50] hover:bg-white/5 font-bold tracking-[0.2em] text-xs group uppercase">
+                <a href="#about" className="flex items-center">
+                  Learn More <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" size={16} />
+                </a>
+              </Button>
             </div>
           </div>
         </section>
 
-        <section className="section about-section" id="about">
-          <div className="container container-large">
-            <div className="about-grid">
-              <div className="about-text scroll-reveal">
-                <div className="section-tag flex items-center gap-2">
-                   <span className="w-8 h-[2px] bg-[#4CAF50]"></span> OUR CORE MISSION
-                </div>
-                <h2 className="section-title text-5xl font-black mb-6 leading-tight text-gray-900 italic">"Unexpected problems, <span className="text-[#4CAF50]">realized solutions.</span>"</h2>
-                <p className="about-description text-xl text-gray-600 leading-loose mb-10">
-                  We are **Grace and Truth Life Care Centre Inc.**, a community dedicated to spiritual growth and practical care in Cagayan de Oro. We believe every challenge is an opportunity for God's grace to provide a solution.
-                </p>
-                <div className="grid grid-cols-2 gap-8 mb-10">
-                   <div className="p-6 bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                      <span className="block text-2xl font-black text-[#4CAF50] mb-2">9+</span>
-                      <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Years of Service</span>
-                   </div>
-                   <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                      <span className="block text-2xl font-black text-[#4CAF50] mb-2">500+</span>
-                      <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Lives Touched</span>
-                   </div>
-                </div>
-              </div>
-              <div className="about-image scroll-reveal relative group rounded-[40px] overflow-hidden shadow-2xl" style={{ transitionDelay: '200ms' }}>
-                <img src="/images/church_gathering.png" alt="Community gathering" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-              </div>
-            </div>
+        {/* --- SERVICE INFO / ABOUT (ID: about) --- */}
+        <section id="about" className="relative z-20 -mt-20 max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-0 shadow-2xl rounded-sm overflow-hidden border-none scroll-reveal">
+            <Card className="bg-[#4CAF50] border-none rounded-none text-white p-6">
+              <CardContent className="pt-6 flex flex-col items-center text-center">
+                <Clock className="mb-4 opacity-80" size={40} />
+                <h3 className="font-black tracking-tighter text-2xl mb-1 uppercase italic">Sunday Service</h3>
+                <p className="text-white/80 text-sm font-bold tracking-widest uppercase">9:00 AM & 4:00 PM</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-slate-900 border-none rounded-none text-white p-6">
+              <CardContent className="pt-6 flex flex-col items-center text-center">
+                <MapPin className="mb-4 opacity-80" size={40} />
+                <h3 className="font-black tracking-tighter text-2xl mb-1 uppercase italic">Location</h3>
+                <p className="text-white/80 text-[10px] font-bold tracking-widest uppercase italic text-center">2F Jofel Bldg, Mortola St., CDO</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-white border-none rounded-none text-slate-900 p-6">
+              <CardContent className="pt-6 flex flex-col items-center text-center">
+                <Users className="mb-4 text-[#4CAF50]" size={40} />
+                <h3 className="font-black tracking-tighter text-2xl mb-1 uppercase italic">D-Groups</h3>
+                <p className="text-slate-500 text-sm font-bold tracking-widest uppercase italic">Discipleship community</p>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
-        <section className="section services-section bg-[#F9FBFA]" id="services">
-          <div className="container">
-            <div className="text-center section-header scroll-reveal mb-20 max-w-3xl mx-auto">
-              <div className="section-tag">KINGDOM SERVICE</div>
-              <h2 className="section-title text-4xl font-extrabold mb-4">How we serve our community</h2>
-              <p className="text-gray-500 font-medium">From intimate gatherings to massive community outreaches, there's a place for everyone to experience grace and truth.</p>
-            </div>
-
-            <div className="cards-grid">
-              <div className="card scroll-reveal group border-none shadow-none bg-transparent h-full">
-                <div className="card-img-wrapper rounded-[30px] shadow-lg mb-6 group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative aspect-square">
-                   <img src="/images/worship.png" alt="Worship" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
-                   <div className="absolute bottom-6 left-6 right-6 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white transform group-hover:-translate-y-2 transition-transform">
-                      <h4 className="font-bold uppercase tracking-widest text-[10px]">Weekly Gathering</h4>
-                      <p className="text-lg font-black">Worship Services</p>
-                   </div>
+        {/* --- NEXT STEPS / MINISTRIES (ID: next-steps) --- */}
+        <section id="next-steps" className="py-48">
+          <div className="max-w-7xl mx-auto px-6 text-center mb-24 scroll-reveal">
+            <span className="text-[#4CAF50] font-black tracking-[0.4em] text-[10px] uppercase italic">Get Involved</span>
+            <h2 className="text-7xl font-black tracking-tighter uppercase italic text-slate-900 leading-none mt-4">Your Next Step</h2>
+          </div>
+          <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12">
+            {[
+              { title: "I'm New Here", label: "01. Start Here", img: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=500" },
+              { title: "Join a D-Group", label: "02. Community", img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=500" },
+              { title: "Start Serving", label: "03. Volunteer", img: "https://images.unsplash.com/photo-1469571483350-f63005ff16bd?q=80&w=500" }
+            ].map((step, i) => (
+              <div key={i} className="scroll-reveal group relative h-[500px] overflow-hidden cursor-pointer shadow-xl">
+                <img src={step.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0" alt={step.title} />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-90"></div>
+                <div className="absolute bottom-12 left-12 right-12 text-center">
+                  <span className="text-[#4CAF50] font-black tracking-[0.3em] text-[10px] uppercase mb-4 block italic">{step.label}</span>
+                  <h4 className="text-white font-black text-3xl tracking-tighter italic uppercase mb-6">{step.title}</h4>
                 </div>
               </div>
-
-              <div className="card scroll-reveal group border-none shadow-none bg-transparent h-full" style={{ transitionDelay: '150ms' }}>
-                <div className="card-img-wrapper rounded-[30px] shadow-lg mb-6 group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative aspect-square">
-                   <img src="/images/outreach.png" alt="Outreach" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
-                   <div className="absolute bottom-6 left-6 right-6 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white transform group-hover:-translate-y-2 transition-transform">
-                      <h4 className="font-bold uppercase tracking-widest text-[10px]">Civic Spirit</h4>
-                      <p className="text-lg font-black">Life Care Programs</p>
-                   </div>
-                </div>
-              </div>
-
-              <div className="card scroll-reveal group border-none shadow-none bg-transparent h-full" style={{ transitionDelay: '300ms' }}>
-                <div className="card-img-wrapper rounded-[30px] shadow-lg mb-6 group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative aspect-square">
-                   <img src="/images/connect.png" alt="Connect" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
-                   <div className="absolute bottom-6 left-6 right-6 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white transform group-hover:-translate-y-2 transition-transform">
-                      <h4 className="font-bold uppercase tracking-widest text-[10px]">Relational Deep</h4>
-                      <p className="text-lg font-black">Connect Groups</p>
-                   </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
-        <section className="section cta-section relative overflow-hidden h-[600px] flex items-center justify-center" id="connect">
-          <div className="absolute inset-0 z-0 scale-110 hover:scale-100 transition-transform duration-[20s]">
-            <img src="/images/bible_study.png" alt="CTA BG" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]"></div>
-          </div>
-          <div className="container relative z-10 text-center text-white scroll-reveal flex flex-col items-center">
-            <div className="w-20 h-[2px] bg-[#4CAF50] mb-8"></div>
-            <h2 className="cta-title text-7xl font-black mb-4 tracking-tighter uppercase italic">Field Bible School</h2>
-            <p className="text-xl max-w-2xl text-gray-300 mb-10 leading-relaxed">Prepare for ministry with advanced doctrine and spiritual training. Enrollment for 2026 is currently open.</p>
-            <div className="flex gap-4">
-              <Link to="/register" className="btn btn-primary px-10 py-5 text-lg">ENROLL NOW</Link>
-              <Link to="/login" className="btn btn-outline px-10 py-5 text-lg">STUDENT LOG IN</Link>
+        {/* --- CONTACT / CHAT SECTION (ID: contact) --- */}
+        <section id="contact" className="bg-slate-50 py-32 border-y border-slate-100">
+          <div className="max-w-4xl mx-auto px-6 text-center scroll-reveal">
+            <Heart className="mx-auto text-[#4CAF50] mb-8" size={48} />
+            <h3 className="text-slate-900 text-4xl md:text-5xl font-black tracking-tighter italic uppercase mb-4">Do you just need someone to talk to?</h3>
+            <p className="text-slate-500 font-bold tracking-widest uppercase text-sm mb-10 italic">Our prayer warriors and counselors are here for you.</p>
+            <div className="flex justify-center">
+              <Button asChild className="bg-[#4CAF50] hover:bg-[#439c47] rounded-full px-12 py-8 h-auto text-white font-bold tracking-[0.2em] text-sm uppercase shadow-2xl hover:scale-105 transition-all">
+                <a href="https://m.me/LifeCareCenterCDO" target="_blank" rel="noreferrer">
+                  CHAT WITH US! <MessageCircle className="ml-3" size={20} />
+                </a>
+              </Button>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="footer" id="contact">
-        <div className="container">
-          <div className="footer-grid">
-            <div className="footer-brand">
-              <h3 className="footer-logo">GRACE &amp; TRUTH</h3>
-              <p className="brand-subtext">Life Care Centre Inc.</p>
-              <p className="brand-desc">Spreading grace, sharing truth, and offering life care solutions to the community.</p>
+      {/* --- FOOTER --- */}
+      <footer className="bg-slate-950 py-24 px-6 text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-20 mb-20">
+            <div className="space-y-8 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-4">
+                <img
+                  src="/favicon.png"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-[#4CAF50]/20"
+                  alt="LCC Logo"
+                  onError={(e) => { e.target.src = "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=100066636565507"; }}
+                />
+                <span className="font-black tracking-tighter text-3xl italic uppercase">LCC CDO</span>
+              </div>
+              <div className="space-y-4">
+                <p className="text-slate-500 font-black text-[10px] tracking-widest uppercase italic">Stay Updated</p>
+                <div className="flex flex-col gap-4">
+                  <a href="https://web.facebook.com/LifeCareCenterCDO" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-3 text-xs font-bold tracking-tighter uppercase transition-colors">
+                    <FacebookIcon size={18} /> /LifeCareCenterCDO
+                  </a>
+                  <a href="#" className="text-slate-400 hover:text-[#FF0000] flex items-center justify-center md:justify-start gap-3 text-xs font-bold tracking-tighter uppercase transition-colors">
+                    <YoutubeIcon size={18} /> /CCFmainTV
+                  </a>
+                  <a href="#" className="text-slate-400 hover:text-[#E4405F] flex items-center justify-center md:justify-start gap-3 text-xs font-bold tracking-tighter uppercase transition-colors">
+                    <InstagramIcon size={18} /> @lifecarecentercdo
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <div className="footer-info">
-              <h4 className="footer-heading">VISIT US</h4>
-              <p className="footer-detail text-white">
-                <svg className="icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                Cagayan de Oro, Philippines, 9000
-              </p>
-            </div>
-
-            <div className="footer-info">
-              <h4 className="footer-heading">CONTACT</h4>
-              <p className="footer-detail text-white">
-                <svg className="icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                0965 882 2806 <br /> 0998 989 7712
-              </p>
-              <p className="footer-detail text-white mt-2">
-                <svg className="icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                <a href="mailto:lifecarecentrecdo@gmail.com" className="footer-link">lifecarecentrecdo@gmail.com</a>
-              </p>
-            </div>
-
-            <div className="footer-info">
-              <h4 className="footer-heading">SOCIAL</h4>
-              <a href="https://www.facebook.com/LifeCareCenterCDO" target="_blank" rel="noopener noreferrer" className="social-btn">
-                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-              </a>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-20 w-full md:w-auto text-center md:text-left">
+              <div className="space-y-6">
+                <h5 className="font-black text-[10px] tracking-[0.4em] uppercase italic text-slate-500">Legal</h5>
+                <ul className="space-y-4 text-xs font-bold tracking-widest uppercase">
+                  <li><a href="#" className="hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-2 transition-colors"><FileText size={14} /> Terms and Conditions</a></li>
+                  <li><a href="#" className="hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-2 transition-colors"><ShieldCheck size={14} /> Privacy Policy</a></li>
+                </ul>
+              </div>
+              <div className="space-y-6">
+                <h5 className="font-black text-[10px] tracking-[0.4em] uppercase italic text-slate-500">Contact Us</h5>
+                <ul className="space-y-4 text-xs font-bold tracking-widest uppercase text-slate-400">
+                  <li className="flex items-center justify-center md:justify-start gap-2"><MapPin size={14} /> Mortola St., Cagayan de Oro</li>
+                  <li className="flex items-center justify-center md:justify-start gap-2"><Globe size={14} /> lcccdo.org</li>
+                </ul>
+              </div>
             </div>
           </div>
 
-          <div className="footer-bottom">
-            <p>&copy; 2026 Grace and Truth Life Care Centre Inc. All rights reserved.</p>
+          <Separator className="bg-white/5 mb-12" />
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-slate-600 text-[10px] font-black tracking-[0.4em] uppercase italic text-center">
+            <p>Christ's Commission Fellowship &copy; 2026</p>
+            <p className="text-white/20 hover:text-[#4CAF50] transition-colors cursor-default tracking-[1em]">Excellence</p>
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
 

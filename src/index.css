@@ -2,513 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Variables and Global Resets */
-:root {
-    --primary-color: #4CAF50; /* LCC Green */
-    --primary-color-dark: #388E3C;
-    --dark-color: #1a1a1a;
-    --light-color: #f7f9fa;
-    --text-color: #333333;
-    --text-muted: #666666;
-    --white: #ffffff;
-    --overlay-color: rgba(0, 0, 0, 0.65);
-    --font-heading: 'Montserrat', sans-serif;
-    --font-body: 'Montserrat', sans-serif;
-    --transition-standard: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+        --radius: 0.5rem;
+    }
+
+    /* Mao ni ang mo-handle sa smooth scrolling sa tibuok site */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    * {
+        border-color: hsl(var(--border));
+    }
+
+    body {
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: var(--font-body);
-    color: var(--text-color);
-    line-height: 1.6;
-    font-size: 16px;
-    background-color: var(--white);
-    overflow-x: hidden;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-    transition: var(--transition-standard);
-}
-
-.text-center { text-align: center; }
-.text-white { color: var(--white); }
-.mt-4 { margin-top: 2rem; }
-.mt-2 { margin-top: 1rem; }
-.bg-light { background-color: var(--light-color); }
-
-/* Containers */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-.container-large { max-width: 1400px; }
-.section { padding: 6rem 0; }
-
-/* Navigation (Sticky & Transparent) */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    padding: 1.5rem 0;
-    transition: var(--transition-standard);
-}
-
-.navbar.scrolled {
-    background-color: var(--white);
-    padding: 1rem 0;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-}
-
-.nav-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo a {
-    font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: 1.2rem;
-    letter-spacing: 1px;
-    color: var(--white);
-    text-transform: uppercase;
-}
-
-.navbar.scrolled .logo a, .navbar.scrolled .logo span { color: var(--dark-color); }
-
-.nav-links {
-    display: flex;
-    gap: 2.5rem;
-}
-
-.nav-link {
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--white);
-    position: relative;
-    padding-bottom: 5px;
-}
-
-.navbar.scrolled .nav-link { color: var(--text-color); }
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0%;
-    height: 2px;
-    background-color: var(--primary-color);
-    transition: var(--transition-standard);
-}
-
-.nav-link:hover::after { width: 100%; }
-
-/* Mobile Menu Button */
-.mobile-menu-btn {
-    display: none;
-    flex-direction: column;
-    gap: 6px;
-    cursor: pointer;
-}
-
-.mobile-menu-btn span {
-    width: 30px;
-    height: 2px;
-    background-color: var(--white);
-    transition: var(--transition-standard);
-}
-
-.navbar.scrolled .mobile-menu-btn span { background-color: var(--dark-color); }
-
-/* Hero Section */
-.hero {
-    height: 100vh;
-    min-height: 600px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    overflow: hidden;
-}
-
-.hero-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1456105935968197');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    z-index: 1;
-    transform: scale(1);
-    animation: zoomAmbient 30s infinite alternate linear;
-}
-
-@keyframes zoomAmbient {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.1); }
-}
-
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.8));
-    z-index: 2;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 3;
-    max-width: 800px;
-    padding: 0 20px;
-}
-
-.hero-title {
-    font-family: var(--font-heading);
-    font-size: 5rem;
-    font-weight: 800;
-    color: var(--white);
-    margin-bottom: 2rem;
-    line-height: 1.1;
-    text-transform: lowercase;
-    opacity: 0;
-    animation: fadeUp 1s 0.2s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeUp 1s 0.6s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-/* Buttons */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 14px 32px;
-    font-size: 0.9rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: var(--transition-standard);
-}
-
-.btn-outline {
-    border: 2px solid var(--white);
-    color: var(--white);
-    background: transparent;
-}
-
-.btn-outline:hover {
-    background: var(--white);
-    color: var(--dark-color);
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-.btn-primary {
-    background: var(--primary-color);
-    color: var(--white);
-    border: 2px solid var(--primary-color);
-}
-
-.btn-primary:hover {
-    background: var(--primary-color-dark);
-    border-color: var(--primary-color-dark);
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
-}
-
-/* Typography elements */
-.section-tag {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    letter-spacing: 2px;
-}
-
-.section-title {
-    font-size: 2.8rem;
-    font-weight: 800;
-    color: var(--dark-color);
-    margin-bottom: 2rem;
-    line-height: 1.2;
-}
-
-/* About Section */
-.about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: center;
-}
-
-.mission-statement {
-    font-size: 1.6rem;
-    font-style: italic;
-    color: var(--dark-color);
-    border-left: 4px solid var(--primary-color);
-    padding-left: 2rem;
-    margin: 2rem 0;
-    line-height: 1.5;
-    font-weight: 500;
-}
-
-.about-description {
-    font-size: 1.1rem;
-    color: var(--text-muted);
-}
-
-.about-image {
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-}
-
-.about-image img {
-    transition: transform 0.8s ease;
-}
-
-.about-image:hover img {
-    transform: scale(1.03);
-}
-
-.image-accent {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 8px;
-    background-color: var(--primary-color);
-}
-
-/* Ministries/Services Section */
-.section-header {
-    margin-bottom: 4rem;
-}
-
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
-}
-
-.card {
-    background: var(--white);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.04);
-    transition: var(--transition-standard);
-    border: 1px solid #f3f4f6;
-    position: relative;
-    top: 0;
-}
-
-.card:hover {
-    box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-    top: -6px;
-}
-
-.card-img-wrapper {
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
-}
-
-.card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.8s ease;
-}
-
-.card:hover .card-img {
-    transform: scale(1.05);
-}
-
-.card-body {
-    padding: 2.5rem 2rem;
-    position: relative;
-}
-
-.card-number {
-    position: absolute;
-    top: -35px;
-    right: 25px;
-    font-family: var(--font-heading);
-    font-size: 4rem;
-    font-weight: 900;
-    color: rgba(255,255,255,0.8);
-    -webkit-text-stroke: 1px var(--primary-color);
-    line-height: 1;
-    z-index: 10;
-}
-
-.card h3 {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    color: var(--dark-color);
-    font-weight: 700;
-}
-
-.card p {
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
-}
-
-.card-link {
-    font-weight: 700;
-    color: var(--primary-color);
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-}
-
-.card-link:hover { padding-left: 5px; }
-
-/* CTA Section */
-.cta-section {
-    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1456105935968197');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    padding: 8rem 0;
-}
-
-.cta-title {
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-}
-
-/* Footer */
-.footer {
-    background-color: var(--dark-color);
-    color: var(--white);
-    padding: 5rem 0 0 0;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 3rem;
-    margin-bottom: 4rem;
-}
-
-.footer-brand { padding-right: 2rem; }
-
-.footer-logo {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    letter-spacing: 1px;
-}
-
-.brand-subtext {
-    font-weight: 700;
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
-}
-
-.brand-desc {
-    color: #999;
-    font-size: 0.95rem;
-}
-
-.footer-heading {
-    font-size: 0.9rem;
-    color: #aaa;
-    letter-spacing: 2px;
-    margin-bottom: 2rem;
-    font-weight: 600;
-}
-
-.footer-detail {
-    display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    color: #ddd;
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
-}
-
-.icon { flex-shrink: 0; color: var(--primary-color); }
-.footer-link:hover { color: var(--primary-color); }
-
-.social-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 45px;
-    height: 45px;
-    background-color: rgba(255,255,255,0.05);
-    border-radius: 50%;
-    color: var(--white);
-}
-
-.social-btn:hover {
-    background-color: var(--primary-color);
-    transform: translateY(-3px);
-}
-
-.footer-bottom {
-    background-color: #111;
-    padding: 1.5rem 0;
-    text-align: center;
-    font-size: 0.85rem;
-    color: #666;
-}
-
-/* Animations */
-@keyframes fadeUp {
-    0% { opacity: 0; transform: translateY(30px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
+/* --- SCROLL REVEAL ANIMATIONS --- */
+/* Mao ni ang classes para sa "active" effect sa PublicHome */
 .scroll-reveal {
     opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform: translateY(30px);
+    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .scroll-reveal.active {
@@ -516,39 +55,21 @@ a {
     transform: translateY(0);
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .hero-title { font-size: 3.5rem; }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
+/* Optional: Slow pulse para sa Hero Image */
+.animate-pulse-slow {
+    animation: pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@media (max-width: 768px) {
-    .nav-links {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 70%;
-        height: 100vh;
-        background-color: var(--white);
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        transition: right 0.4s ease;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+@keyframes pulse-slow {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(1);
     }
-    
-    .nav-links.active { right: 0; }
-    
-    .nav-link { color: var(--dark-color); font-size: 1.2rem; }
-    .mobile-menu-btn { display: flex; z-index: 1001; }
-    .mobile-menu-btn.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); background-color: var(--dark-color); }
-    .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
-    .mobile-menu-btn.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); background-color: var(--dark-color); }
-    
-    .hero-title { font-size: 2.8rem; }
-    .hero-buttons { flex-direction: column; gap: 1rem; width: 100%; }
-    .btn { width: 100%; padding: 16px; }
-    
-    .footer-grid { grid-template-columns: 1fr; }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05);
+    }
 }
