@@ -57,7 +57,7 @@ function PublicHome() {
         <section id="top" className="relative h-[95vh] flex items-center justify-center overflow-hidden bg-slate-950">
           <div className="absolute inset-0 z-0">
             <img
-              src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=2070&auto=format&fit=crop"
+              src="/lcbg.jpg"
               className="w-full h-full object-cover opacity-40"
               alt="Worship"
             />
