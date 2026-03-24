@@ -122,9 +122,25 @@ function PublicHome() {
           </div>
           <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12">
             {[
-              { title: "I'm New Here", label: "01. Start Here", img: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=500" },
-              { title: "Join a D-Group", label: "02. Community", img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=500" },
-              { title: "Start Serving", label: "03. Volunteer", img: "https://images.unsplash.com/photo-1469571483350-f63005ff16bd?q=80&w=500" }
+              [
+                {
+                  title: "I'm New Here",
+                  label: "01. Start Here",
+                  img: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=500"
+                },
+                {
+                  title: "Join a D-Group",
+                  label: "02. Community",
+                  // Gi-update para sa imong Community image
+                  img: "https://web.facebook.com/photo.php?fbid=1261042986126908"
+                },
+                {
+                  title: "Start Serving",
+                  label: "03. Volunteer",
+                  // Gi-update para sa imong Volunteer image
+                  img: "https://web.facebook.com/photo.php?fbid=1264938939070646"
+                }
+              ]
             ].map((step, i) => (
               <div key={i} className="scroll-reveal group relative h-[500px] overflow-hidden cursor-pointer shadow-xl">
                 <img src={step.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0" alt={step.title} />
