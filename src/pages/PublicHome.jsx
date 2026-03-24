@@ -131,14 +131,12 @@ function PublicHome() {
                 {
                   title: "Join a D-Group",
                   label: "02. Community",
-                  // Gi-update para sa imong Community image
-                  img: "https://web.facebook.com/photo.php?fbid=1261042986126908"
+                  img: "/2.jpg"
                 },
                 {
                   title: "Start Serving",
                   label: "03. Volunteer",
-                  // Gi-update para sa imong Volunteer image
-                  img: "https://web.facebook.com/photo.php?fbid=1264938939070646"
+                  img: "/1.jpg"
                 }
               ]
             ].map((step, i) => (
