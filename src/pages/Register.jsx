@@ -1,19 +1,35 @@
 import { useState } from 'react';
 import { supabase } from '../supabase';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { Loader2, ArrowLeft, UserPlus, Mail, Lock, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 
 function Register({ user, role }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Redirect if already logged in
   if (user && role === 'admin') return <Navigate to="/admin" />;
   if (user && role === 'student') return <Navigate to="/dashboard" />;
+
+  const passwordStrength = () => {
+    if (!password) return 0;
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    return score;
+  };
+
+  const strengthLabel = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+  const strengthColor = ['', '#ef4444', '#f59e0b', '#22c55e', '#22c55e'];
+  const strength = passwordStrength();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -22,120 +38,248 @@ function Register({ user, role }) {
     setSuccess('');
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('Passwords do not match. Please try again.');
       setLoading(false);
       return;
     }
 
     try {
-      const { data, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
+      const { data, error: authError } = await supabase.auth.signUp({ email, password });
       if (authError) throw authError;
 
       if (data.user) {
-        // Create profile in the users table
         const { error: profileError } = await supabase
           .from('users')
-          .insert({
-            id: data.user.id,
-            email: data.user.email,
-            role: 'student' // Default role
-          });
+          .insert({ id: data.user.id, email: data.user.email, role: 'student' });
 
-        if (profileError) {
-          console.error("Profile creation error:", profileError);
-          // Even if profile fails, user was created in Auth. 
-          // They might need to contact admin if profile doesn't show up.
-        }
+        if (profileError) console.error("Profile creation error:", profileError);
 
-        setSuccess('Registration successful! Please check your email for verification (if enabled) or sign in.');
+        setSuccess('Account created! Check your email or sign in now.');
         setTimeout(() => navigate('/login'), 3000);
       }
     } catch (err) {
       console.error(err);
-      setError(err.message || 'Registration failed.');
+      setError(err.message || 'Registration failed. Please try again.');
     }
     setLoading(false);
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden font-sans">
-      {/* Cinematic Background */}
-      <div className="absolute inset-0 bg-[url('https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=125438837139151')] bg-cover bg-center"></div>
-      <div className="absolute inset-0 bg-gray-900/70 backdrop-blur-sm"></div>
+  const inputStyle = {
+    background: 'rgba(255,255,255,0.04)',
+    border: '1px solid rgba(255,255,255,0.08)',
+    caretColor: '#22c55e',
+  };
+  const inputFocus = (e) => { e.target.style.borderColor = 'rgba(34,197,94,0.5)'; e.target.style.background = 'rgba(34,197,94,0.04)'; };
+  const inputBlur = (e) => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.background = 'rgba(255,255,255,0.04)'; };
 
-      <div className="relative z-10 w-full max-w-lg px-4">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-block transform transition hover:scale-105">
-            <img src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=100066636565507" alt="Logo" className="w-24 h-24 rounded-full mx-auto shadow-2xl border-4 border-[#4CAF50] object-cover" />
-            <h1 className="text-3xl font-extrabold mt-4 text-white tracking-wider uppercase">Join FBS</h1>
-            <p className="text-[#FDD835] font-semibold text-sm tracking-widest uppercase mt-1">Field Bible School Enrollment</p>
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden font-sans py-10" style={{ background: '#060a10' }}>
+
+      {/* Background layers */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-0 w-[700px] h-[700px]" style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)' }} />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px]" style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.04) 0%, transparent 70%)' }} />
+      </div>
+
+      {/* Grid overlay */}
+      <div className="absolute inset-0 z-0 opacity-[0.025]" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+        backgroundSize: '40px 40px'
+      }} />
+
+      <div className="relative z-10 w-full max-w-[420px] px-5">
+
+        {/* Brand header */}
+        <div className="text-center mb-10">
+          <Link to="/" className="inline-flex flex-col items-center gap-3 group">
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full blur-2xl scale-150" style={{ background: 'rgba(34,197,94,0.2)' }} />
+              <img
+                src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=100066636565507"
+                alt="Logo"
+                className="relative w-[64px] h-[64px] rounded-full object-cover border-2 transition-transform duration-500 group-hover:scale-110"
+                style={{ borderColor: 'rgba(34,197,94,0.5)', boxShadow: '0 0 0 4px rgba(34,197,94,0.08), 0 20px 40px rgba(0,0,0,0.5)' }}
+              />
+            </div>
+            <div>
+              <h1 className="text-sm font-black tracking-[0.2em] uppercase text-white">Join FBS</h1>
+              <p className="text-[9px] font-black tracking-[0.4em] uppercase mt-0.5" style={{ color: 'rgba(253,216,53,0.7)' }}>
+                Field Bible School
+              </p>
+            </div>
           </Link>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
-          {error && (
-            <div className="bg-red-500/20 border border-red-500/50 text-red-100 px-4 py-3 rounded-lg mb-6 backdrop-blur-sm text-sm">
-              {error}
-            </div>
-          )}
-          {success && (
-            <div className="bg-green-500/20 border border-green-500/50 text-green-100 px-4 py-3 rounded-lg mb-6 backdrop-blur-sm text-sm">
-              {success}
-            </div>
-          )}
+        {/* Card */}
+        <div className="rounded-[28px] overflow-hidden" style={{
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          backdropFilter: 'blur(40px)',
+          boxShadow: '0 40px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)'
+        }}>
 
-          <form onSubmit={handleRegister} className="space-y-4">
-            <div>
-              <label className="block text-gray-300 text-xs font-bold mb-2 uppercase tracking-wide">Email Address</label>
-              <input
-                type="email"
-                required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent transition-all placeholder-gray-400 font-medium"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-gray-300 text-xs font-bold mb-2 uppercase tracking-wide">Password</label>
-              <input
-                type="password"
-                required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent transition-all placeholder-gray-400 font-medium"
-                placeholder="Create password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-gray-300 text-xs font-bold mb-2 uppercase tracking-wide">Confirm Password</label>
-              <input
-                type="password"
-                required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent transition-all placeholder-gray-400 font-medium"
-                placeholder="Repeat password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full bg-[#4CAF50] text-white font-bold py-3 px-4 rounded-xl focus:outline-none focus:shadow-outline hover:bg-[#388E3C] hover:shadow-[0_10px_20px_rgba(76,175,80,0.3)] transition-all transform hover:-translate-y-1 mt-4 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              {loading ? 'Creating Account...' : 'Register as Student'}
-            </button>
-          </form>
+          {/* Top accent */}
+          <div className="h-[2px] w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(34,197,94,0.8), transparent)' }} />
 
-          <div className="mt-8 text-center text-sm text-gray-300">
-            <p>Already have an account? <Link to="/login" className="text-[#FDD835] hover:text-white font-semibold transition-colors">Sign In here</Link></p>
-            <Link to="/" className="text-gray-400 hover:text-white mt-4 inline-block transition-colors">&larr; Back to Home</Link>
+          <div className="p-8">
+
+            <div className="mb-7">
+              <h2 className="text-[22px] font-black text-white tracking-tight leading-none mb-1.5">Create account</h2>
+              <p className="text-[11px] font-bold uppercase tracking-[0.25em]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                Register as a student
+              </p>
+            </div>
+
+            {/* Error / Success */}
+            {error && (
+              <div className="mb-5 p-4 rounded-2xl" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                <p className="text-[11px] font-bold tracking-wider text-center" style={{ color: 'rgba(252,165,165,0.9)' }}>{error}</p>
+              </div>
+            )}
+            {success && (
+              <div className="mb-5 p-4 rounded-2xl flex items-center gap-3" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)' }}>
+                <CheckCircle2 size={16} style={{ color: '#22c55e', flexShrink: 0 }} />
+                <p className="text-[11px] font-bold tracking-wider" style={{ color: 'rgba(134,239,172,0.9)' }}>{success}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleRegister} className="space-y-4">
+
+              {/* Email */}
+              <div className="space-y-2">
+                <label className="block text-[10px] font-black tracking-[0.25em] uppercase" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" size={16} style={{ color: 'rgba(255,255,255,0.2)' }} />
+                  <input
+                    type="email"
+                    required
+                    placeholder="you@example.com"
+                    className="w-full h-[52px] pl-11 pr-4 text-sm font-medium text-white outline-none transition-all duration-200 rounded-2xl"
+                    style={inputStyle}
+                    onFocus={inputFocus}
+                    onBlur={inputBlur}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div className="space-y-2">
+                <label className="block text-[10px] font-black tracking-[0.25em] uppercase" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" size={16} style={{ color: 'rgba(255,255,255,0.2)' }} />
+                  <input
+                    type={showPass ? 'text' : 'password'}
+                    required
+                    placeholder="Create a strong password"
+                    className="w-full h-[52px] pl-11 pr-12 text-sm font-medium text-white outline-none transition-all duration-200 rounded-2xl"
+                    style={inputStyle}
+                    onFocus={inputFocus}
+                    onBlur={inputBlur}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 transition-opacity hover:opacity-80">
+                    {showPass ? <EyeOff size={16} style={{ color: 'rgba(255,255,255,0.3)' }} /> : <Eye size={16} style={{ color: 'rgba(255,255,255,0.3)' }} />}
+                  </button>
+                </div>
+                {/* Password strength bar */}
+                {password && (
+                  <div className="space-y-1.5 px-0.5">
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="flex-1 h-1 rounded-full transition-all duration-300" style={{
+                          background: i <= strength ? strengthColor[strength] : 'rgba(255,255,255,0.08)'
+                        }} />
+                      ))}
+                    </div>
+                    <p className="text-[9px] font-black tracking-widest uppercase" style={{ color: strengthColor[strength] }}>
+                      {strengthLabel[strength]}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Confirm Password */}
+              <div className="space-y-2">
+                <label className="block text-[10px] font-black tracking-[0.25em] uppercase" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" size={16} style={{ color: 'rgba(255,255,255,0.2)' }} />
+                  <input
+                    type={showConfirm ? 'text' : 'password'}
+                    required
+                    placeholder="Repeat your password"
+                    className="w-full h-[52px] pl-11 pr-12 text-sm font-medium text-white outline-none transition-all duration-200 rounded-2xl"
+                    style={{
+                      ...inputStyle,
+                      borderColor: confirmPassword && confirmPassword !== password ? 'rgba(239,68,68,0.4)' : confirmPassword && confirmPassword === password ? 'rgba(34,197,94,0.4)' : 'rgba(255,255,255,0.08)'
+                    }}
+                    onFocus={inputFocus}
+                    onBlur={inputBlur}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-4 top-1/2 -translate-y-1/2 transition-opacity hover:opacity-80">
+                    {showConfirm ? <EyeOff size={16} style={{ color: 'rgba(255,255,255,0.3)' }} /> : <Eye size={16} style={{ color: 'rgba(255,255,255,0.3)' }} />}
+                  </button>
+                  {confirmPassword && confirmPassword === password && (
+                    <CheckCircle2 className="absolute right-10 top-1/2 -translate-y-1/2" size={14} style={{ color: '#22c55e' }} />
+                  )}
+                </div>
+              </div>
+
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full h-[52px] font-black text-[11px] tracking-[0.25em] uppercase text-white transition-all duration-300 rounded-2xl mt-2 flex items-center justify-center gap-2 disabled:opacity-60"
+                style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '0 8px 24px rgba(34,197,94,0.25), inset 0 1px 0 rgba(255,255,255,0.1)' }}
+                onMouseEnter={e => { if (!loading) { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(34,197,94,0.35), inset 0 1px 0 rgba(255,255,255,0.1)'; } }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(34,197,94,0.25), inset 0 1px 0 rgba(255,255,255,0.1)'; }}
+              >
+                {loading
+                  ? <><Loader2 className="h-4 w-4 animate-spin" /> Creating Account...</>
+                  : <><UserPlus size={14} /> Register as Student</>
+                }
+              </button>
+            </form>
+          </div>
+
+          {/* Footer links */}
+          <div className="px-8 pb-8 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
+            </div>
+            <div className="text-center space-y-3">
+              <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                Already have an account?{' '}
+                <Link to="/login" className="font-bold" style={{ color: 'rgba(34,197,94,0.9)' }}>
+                  Sign in here
+                </Link>
+              </p>
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase transition-colors"
+                style={{ color: 'rgba(255,255,255,0.2)' }}
+                onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.2)'}
+              >
+                <ArrowLeft size={12} /> Back to Home
+              </Link>
+            </div>
           </div>
         </div>
+
+        <p className="text-center text-[9px] font-black tracking-[0.4em] uppercase mt-8" style={{ color: 'rgba(255,255,255,0.1)' }}>
+          Field Bible School · Enrollment Portal
+        </p>
       </div>
     </div>
   );

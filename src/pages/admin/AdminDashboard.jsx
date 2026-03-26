@@ -3,17 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import jsPDF from 'jspdf';
 import {
-  FiTrash2, FiAward, FiUsers, FiBook,
-  FiCheckCircle, FiPlus, FiCloudLightning,
-  FiSearch, FiMaximize
-} from 'react-icons/fi';
+  Trash2, Award, Users, BookOpen,
+  CheckCircle2, Plus, Search,
+  Camera, TrendingUp, Upload, ScanLine
+} from 'lucide-react';
 
-// Supabase Client
 import { supabase } from "../../supabase";
-
-// Components
 import AdminSidebar from "../../components/AdminSidebar";
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
@@ -24,8 +20,8 @@ function AdminDashboard({ user }) {
   const [lessons, setLessons] = useState([]);
   const [attendanceLogs, setAttendanceLogs] = useState([]);
   const [stats, setStats] = useState({ users: 0, lessons: 0, attendance: 0 });
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Form States
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
   const [file, setFile] = useState(null);
@@ -33,40 +29,24 @@ function AdminDashboard({ user }) {
   const [scanResult, setScanResult] = useState('');
   const [uploadLoading, setUploadLoading] = useState(false);
 
-  useEffect(() => {
-    fetchData();
-  }, [activeTab]);
+  useEffect(() => { fetchData(); }, [activeTab]);
 
-  // --- QR SCANNER LIFECYCLE ---
   useEffect(() => {
     let scanner = null;
     if (activeTab === 'scanner') {
-      scanner = new Html5QrcodeScanner('reader', {
-        fps: 10,
-        qrbox: { width: 250, height: 250 },
-      });
-
+      scanner = new Html5QrcodeScanner('reader', { fps: 10, qrbox: { width: 250, height: 250 } });
       scanner.render(async (decodedText) => {
         setScanResult(decodedText);
         try {
-          // I-save ang attendance sa database
           await supabase.from('attendance').insert({
             user_id: decodedText,
-            date: new Date().toLocaleDateString('en-GB'), // DD/MM/YYYY
+            date: new Date().toLocaleDateString('en-GB'),
             time: new Date().toLocaleTimeString()
           });
-          alert("Attendance Recorded: " + decodedText);
-        } catch (err) {
-          console.error("Scan Error:", err);
-        }
+        } catch (err) { console.error("Scan Error:", err); }
       });
     }
-
-    return () => {
-      if (scanner) {
-        scanner.clear().catch(error => console.error("Scanner cleanup failed", error));
-      }
-    };
+    return () => { if (scanner) scanner.clear().catch(() => { }); };
   }, [activeTab]);
 
   const fetchData = async () => {
@@ -81,8 +61,6 @@ function AdminDashboard({ user }) {
         const { data } = await supabase.from('attendance').select('*, users(email)').order('created_at', { ascending: false });
         setAttendanceLogs(data || []);
       }
-
-      // Quick Stats Update
       const { count: uCount } = await supabase.from('users').select('*', { count: 'exact', head: true });
       const { count: lCount } = await supabase.from('lessons').select('*', { count: 'exact', head: true });
       const { count: aCount } = await supabase.from('attendance').select('*', { count: 'exact', head: true });
@@ -92,25 +70,23 @@ function AdminDashboard({ user }) {
 
   const handleUploadLesson = async (e) => {
     e.preventDefault();
-    if (!file) return alert('Pumili muna ng file.');
+    if (!file) return alert('Please select a file first.');
     setUploadLoading(true);
     try {
       const filePath = `lessons/${Date.now()}_${file.name}`;
       const { error: storageError } = await supabase.storage.from('files').upload(filePath, file);
       if (storageError) throw storageError;
-
       const { data: { publicUrl } } = supabase.storage.from('files').getPublicUrl(filePath);
       await supabase.from('lessons').insert({ title, description: desc, file_url: publicUrl });
-
       setTitle(''); setDesc(''); setFile(null);
       fetchData();
-      alert('Lesson Published Successfully!');
+      alert('Module published successfully!');
     } catch (e) { alert('Upload failed: ' + e.message); }
     setUploadLoading(false);
   };
 
   const deleteRecord = async (table, id) => {
-    if (window.confirm('Sigurado ka bang gusto mong i-delete ito?')) {
+    if (window.confirm('Delete this record?')) {
       await supabase.from(table).delete().eq('id', id);
       fetchData();
     }
@@ -131,190 +107,350 @@ function AdminDashboard({ user }) {
     doc.save(`Cert_${certStudentName}.pdf`);
   };
 
-  return (
-    <div className="flex h-screen bg-[#F8FAFC] font-sans overflow-hidden">
+  const card = {
+    background: '#fff',
+    border: '1px solid rgba(0,0,0,0.06)',
+    boxShadow: '0 4px 24px rgba(0,0,0,0.05)',
+    borderRadius: '24px',
+  };
 
-      {/* Sidebar - Naka-fixed na ang UI ani base sa imong Shadcn Sidebar code */}
+  const statCards = [
+    { label: 'Students', value: stats.users, icon: Users, color: '#60a5fa', bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.2)' },
+    { label: 'Modules', value: stats.lessons, icon: BookOpen, color: '#a78bfa', bg: 'rgba(167,139,250,0.08)', border: 'rgba(167,139,250,0.2)' },
+    { label: 'Sessions', value: stats.attendance, icon: CheckCircle2, color: '#34d399', bg: 'rgba(52,211,153,0.08)', border: 'rgba(52,211,153,0.2)' },
+  ];
+
+  const filteredUsers = usersList.filter(u => u.email?.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  return (
+    <div className="flex h-screen font-sans overflow-hidden" style={{ background: '#f1f5f3' }}>
+
       <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} handleLogout={handleLogout} />
 
-      {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto p-8 no-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 pl-0 min-w-0" style={{ scrollbarWidth: 'none' }}>
 
-        {/* Dynamic Header */}
-        <header className="flex justify-between items-center mb-10 bg-white p-10 rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-slate-100 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <FiCloudLightning size={120} />
-          </div>
-          <div className="relative z-10">
-            <h1 className="text-4xl font-black text-slate-900 tracking-tight italic uppercase">Admin Control</h1>
-            <p className="text-emerald-500 text-xs font-black uppercase tracking-[0.4em] mt-2 flex items-center gap-2">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
-              Grace & Truth Management Portal
-            </p>
-          </div>
-
-          <div className="flex gap-8 relative z-10">
-            <div className="bg-slate-50 px-8 py-4 rounded-3xl border border-slate-100 text-center">
-              <p className="text-3xl font-black text-slate-900">{stats.users}</p>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Students</p>
+        {/* ── HEADER ── */}
+        <div className="flex justify-between items-start mb-5 gap-5">
+          <div className="flex-1 p-7 rounded-[24px]" style={{ background: '#0b0f18', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-black text-white tracking-tight">Admin Dashboard</h1>
+                <div className="flex items-center gap-2 mt-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  <p className="text-[10px] font-black tracking-[0.3em] uppercase" style={{ color: 'rgba(34,197,94,0.7)' }}>Grace & Truth Management Portal</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                {statCards.map(({ label, value, icon: Icon, color, bg, border }) => (
+                  <div key={label} className="px-5 py-3 rounded-2xl text-center" style={{ background: bg, border: `1px solid ${border}` }}>
+                    <p className="text-2xl font-black text-white leading-none">{value}</p>
+                    <p className="text-[9px] font-black tracking-widest uppercase mt-1" style={{ color }}>
+                      {label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="bg-emerald-500 px-8 py-4 rounded-3xl text-center shadow-[0_10px_20px_rgba(16,185,129,0.2)]">
-              <p className="text-3xl font-black text-white">{stats.lessons}</p>
-              <p className="text-[10px] font-black text-emerald-100 uppercase tracking-widest mt-1">Modules</p>
-            </div>
           </div>
-        </header>
+        </div>
 
-        <div className="animate-in fade-in slide-in-from-bottom-6 duration-700">
+        {/* ── CONTENT PANELS ── */}
+        <div>
 
-          {/* USERS MANAGEMENT */}
+          {/* USERS */}
           {activeTab === 'users' && (
-            <Card className="rounded-[2.5rem] border-slate-100 shadow-xl overflow-hidden bg-white">
-              <CardHeader className="px-10 py-8 border-b border-slate-50">
-                <div className="flex justify-between items-center">
-                  <CardTitle className="text-2xl font-black italic uppercase tracking-tight flex items-center gap-3">
-                    <FiUsers className="text-emerald-500" /> User Directory
-                  </CardTitle>
-                  <div className="relative">
-                    <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <Input placeholder="Search students..." className="pl-10 rounded-xl bg-slate-50 border-none w-64" />
+            <div style={{ ...card, overflow: 'hidden', padding: 0 }}>
+              <div className="px-8 py-6 flex justify-between items-center" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(96,165,250,0.1)' }}>
+                    <Users size={18} style={{ color: '#2563eb' }} />
+                  </div>
+                  <div>
+                    <h2 className="font-black text-base" style={{ color: '#0f172a' }}>User Directory</h2>
+                    <p className="text-[10px] font-bold" style={{ color: '#94a3b8' }}>{usersList.length} registered accounts</p>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className="p-0">
-                <table className="w-full">
-                  <thead className="bg-slate-50/50 text-slate-400 text-[10px] uppercase font-black tracking-[0.2em]">
-                    <tr>
-                      <th className="px-10 py-5 text-left">Email Address</th>
-                      <th className="px-10 py-5 text-left">Account Role</th>
-                      <th className="px-10 py-5 text-right">Control</th>
+                <div className="relative">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2" size={15} style={{ color: '#94a3b8' }} />
+                  <input
+                    placeholder="Search students..."
+                    className="pl-10 pr-4 h-10 text-sm rounded-xl outline-none transition-all"
+                    style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.07)', color: '#0f172a', width: 220 }}
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    onFocus={e => { e.target.style.borderColor = 'rgba(34,197,94,0.4)'; e.target.style.background = 'rgba(34,197,94,0.03)'; }}
+                    onBlur={e => { e.target.style.borderColor = 'rgba(0,0,0,0.07)'; e.target.style.background = 'rgba(0,0,0,0.04)'; }}
+                  />
+                </div>
+              </div>
+
+              <table className="w-full">
+                <thead style={{ background: 'rgba(0,0,0,0.02)' }}>
+                  <tr>
+                    <th className="px-8 py-4 text-left text-[9px] font-black tracking-[0.3em] uppercase" style={{ color: '#94a3b8' }}>Email Address</th>
+                    <th className="px-8 py-4 text-left text-[9px] font-black tracking-[0.3em] uppercase" style={{ color: '#94a3b8' }}>Role</th>
+                    <th className="px-8 py-4 text-right text-[9px] font-black tracking-[0.3em] uppercase" style={{ color: '#94a3b8' }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredUsers.map((u, i) => (
+                    <tr key={i} className="transition-all duration-150"
+                      style={{ borderTop: '1px solid rgba(0,0,0,0.04)' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.015)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <td className="px-8 py-5 text-sm font-bold" style={{ color: '#1e293b' }}>{u.email}</td>
+                      <td className="px-8 py-5">
+                        <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl"
+                          style={{ background: u.role === 'admin' ? 'rgba(239,68,68,0.08)' : 'rgba(34,197,94,0.08)', color: u.role === 'admin' ? '#dc2626' : '#16a34a' }}>
+                          {u.role}
+                        </span>
+                      </td>
+                      <td className="px-8 py-5 text-right">
+                        <button
+                          onClick={() => deleteRecord('users', u.id)}
+                          className="p-2 rounded-xl transition-all duration-200"
+                          style={{ color: '#cbd5e1' }}
+                          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; e.currentTarget.style.color = '#ef4444'; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#cbd5e1'; }}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-50">
-                    {usersList.map((u, i) => (
-                      <tr key={i} className="hover:bg-slate-50/80 transition-all group">
-                        <td className="px-10 py-6 font-black text-slate-700 text-sm italic">{u.email}</td>
-                        <td className="px-10 py-6">
-                          <span className="bg-emerald-100 text-emerald-700 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tighter">
-                            {u.role}
-                          </span>
-                        </td>
-                        <td className="px-10 py-6 text-right">
-                          <Button variant="ghost" size="icon" className="text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl" onClick={() => deleteRecord('users', u.id)}>
-                            <FiTrash2 size={18} />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </CardContent>
-            </Card>
+                  ))}
+                </tbody>
+              </table>
+              {filteredUsers.length === 0 && (
+                <div className="text-center py-12" style={{ color: '#94a3b8' }}>
+                  <Users size={36} className="mx-auto mb-3 opacity-20" />
+                  <p className="text-sm font-bold">No users found</p>
+                </div>
+              )}
+            </div>
           )}
 
-          {/* LESSONS / MODULES */}
+          {/* LESSONS */}
           {activeTab === 'lessons' && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-              <Card className="rounded-[2.5rem] border-none shadow-2xl bg-slate-900 text-white p-4 h-fit">
-                <CardHeader><CardTitle className="text-xl font-black italic uppercase tracking-tight flex items-center gap-2">
-                  <FiPlus className="text-emerald-400" /> New Module
-                </CardTitle></CardHeader>
-                <CardContent className="space-y-5">
-                  <Input placeholder="Lesson Title" value={title} onChange={e => setTitle(e.target.value)} className="bg-white/5 border-white/10 text-white rounded-2xl h-14" />
-                  <Textarea placeholder="Description" value={desc} onChange={e => setDesc(e.target.value)} className="bg-white/5 border-white/10 text-white rounded-2xl min-h-[120px]" />
-                  <Input type="file" onChange={e => setFile(e.target.files[0])} className="bg-white/5 border-white/10 text-slate-400 rounded-2xl h-14 cursor-pointer" />
-                  <Button onClick={handleUploadLesson} disabled={uploadLoading} className="w-full h-14 bg-emerald-500 hover:bg-emerald-600 rounded-2xl font-black uppercase italic tracking-widest text-xs">
-                    {uploadLoading ? "Uploading..." : "Publish Module"}
-                  </Button>
-                </CardContent>
-              </Card>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-              <div className="lg:col-span-2 space-y-6">
-                {lessons.map(l => (
-                  <Card key={l.id} className="rounded-[2rem] border-slate-100 p-8 flex justify-between items-center group hover:shadow-xl transition-all bg-white">
-                    <div className="flex items-center gap-6">
-                      <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                        <FiBook size={24} />
-                      </div>
-                      <div>
-                        <p className="font-black text-slate-800 text-lg italic uppercase leading-none">{l.title}</p>
-                        <p className="text-xs text-slate-400 font-bold mt-2 uppercase tracking-tighter">{l.description.substring(0, 60)}...</p>
-                      </div>
+              {/* Upload Form */}
+              <div className="rounded-[24px] overflow-hidden flex-shrink-0" style={{ background: '#0b0f18', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(34,197,94,0.5), transparent)' }} />
+                <div className="p-7">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-9 h-9 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(34,197,94,0.1)' }}>
+                      <Plus size={18} style={{ color: '#22c55e' }} />
                     </div>
-                    <Button variant="ghost" className="text-slate-300 hover:text-red-500 rounded-2xl" onClick={() => deleteRecord('lessons', l.id)}>
-                      <FiTrash2 size={20} />
-                    </Button>
-                  </Card>
+                    <div>
+                      <h3 className="font-black text-sm text-white">New Module</h3>
+                      <p className="text-[9px] font-bold tracking-wider uppercase" style={{ color: 'rgba(255,255,255,0.3)' }}>Publish content</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <input
+                      placeholder="Lesson title..."
+                      value={title}
+                      onChange={e => setTitle(e.target.value)}
+                      className="w-full h-[48px] px-4 text-sm font-medium text-white outline-none rounded-2xl transition-all"
+                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+                      onFocus={e => { e.target.style.borderColor = 'rgba(34,197,94,0.4)'; e.target.style.background = 'rgba(34,197,94,0.05)'; }}
+                      onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.background = 'rgba(255,255,255,0.05)'; }}
+                    />
+                    <textarea
+                      placeholder="Module description..."
+                      value={desc}
+                      onChange={e => setDesc(e.target.value)}
+                      rows={4}
+                      className="w-full px-4 py-3 text-sm font-medium text-white outline-none rounded-2xl transition-all resize-none"
+                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+                      onFocus={e => { e.target.style.borderColor = 'rgba(34,197,94,0.4)'; e.target.style.background = 'rgba(34,197,94,0.05)'; }}
+                      onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.background = 'rgba(255,255,255,0.05)'; }}
+                    />
+
+                    {/* File upload zone */}
+                    <label className="flex flex-col items-center justify-center gap-2 h-24 rounded-2xl cursor-pointer transition-all"
+                      style={{ background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.12)' }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(34,197,94,0.4)'; e.currentTarget.style.background = 'rgba(34,197,94,0.04)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
+                    >
+                      <Upload size={20} style={{ color: file ? '#22c55e' : 'rgba(255,255,255,0.2)' }} />
+                      <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: file ? '#22c55e' : 'rgba(255,255,255,0.3)' }}>
+                        {file ? file.name.substring(0, 25) + '...' : 'Upload PDF File'}
+                      </span>
+                      <input type="file" className="hidden" onChange={e => setFile(e.target.files[0])} />
+                    </label>
+
+                    <button
+                      onClick={handleUploadLesson}
+                      disabled={uploadLoading}
+                      className="w-full h-12 font-black text-[11px] tracking-[0.2em] uppercase text-white rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60"
+                      style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '0 8px 24px rgba(34,197,94,0.2)' }}
+                    >
+                      {uploadLoading ? 'Publishing...' : <><Plus size={14} /> Publish Module</>}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Published lessons */}
+              <div className="lg:col-span-2 space-y-3">
+                <h3 className="text-sm font-black tracking-tight mb-4" style={{ color: '#0f172a' }}>Published Modules ({lessons.length})</h3>
+                {lessons.map(l => (
+                  <div key={l.id} className="flex items-center gap-5 p-5 transition-all duration-200 hover:-translate-x-0.5" style={{ ...card, padding: '20px 24px' }}
+                    onMouseEnter={e => e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.1)'}
+                    onMouseLeave={e => e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.05)'}
+                  >
+                    <div className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300" style={{ background: 'rgba(167,139,250,0.1)' }}>
+                      <BookOpen size={20} style={{ color: '#7c3aed' }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-black text-sm truncate" style={{ color: '#0f172a' }}>{l.title}</p>
+                      <p className="text-[11px] mt-1 truncate" style={{ color: '#94a3b8' }}>{l.description?.substring(0, 70)}...</p>
+                    </div>
+                    <button
+                      onClick={() => deleteRecord('lessons', l.id)}
+                      className="p-2 rounded-xl transition-all duration-200 flex-shrink-0"
+                      style={{ color: '#cbd5e1' }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; e.currentTarget.style.color = '#ef4444'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#cbd5e1'; }}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 ))}
+                {lessons.length === 0 && (
+                  <div className="text-center py-16 rounded-[24px]" style={{ background: 'rgba(0,0,0,0.02)', border: '1px dashed rgba(0,0,0,0.08)', color: '#94a3b8' }}>
+                    <BookOpen size={40} className="mx-auto mb-3 opacity-20" />
+                    <p className="text-sm font-bold">No modules yet</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
 
-          {/* ATTENDANCE TRACKER */}
+          {/* ATTENDANCE */}
           {activeTab === 'attendance' && (
-            <Card className="rounded-[2.5rem] border-none shadow-xl bg-white">
-              <CardHeader className="px-10 py-8 border-b border-slate-50">
-                <CardTitle className="text-2xl font-black italic uppercase flex items-center gap-3">
-                  <FiCheckCircle className="text-emerald-500" /> Attendance Feed
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div style={{ ...card, overflow: 'hidden', padding: 0 }}>
+              <div className="px-8 py-6 flex justify-between items-center" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(52,211,153,0.1)' }}>
+                    <CheckCircle2 size={18} style={{ color: '#059669' }} />
+                  </div>
+                  <div>
+                    <h2 className="font-black text-base" style={{ color: '#0f172a' }}>Attendance Feed</h2>
+                    <p className="text-[10px] font-bold" style={{ color: '#94a3b8' }}>Live session tracking</p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-black tracking-widest uppercase px-3 py-1.5 rounded-xl" style={{ background: 'rgba(34,197,94,0.08)', color: '#16a34a' }}>
+                  {attendanceLogs.length} Records
+                </span>
+              </div>
+
+              <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-3">
                 {attendanceLogs.map((log, i) => (
-                  <div key={i} className="flex justify-between items-center p-6 bg-slate-50 rounded-[2rem] border border-slate-100 group hover:border-emerald-200 transition-all">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
-                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                  <div key={i} className="flex justify-between items-center px-5 py-4 rounded-2xl transition-all duration-200"
+                    style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.04)' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(34,197,94,0.03)'; e.currentTarget.style.borderColor = 'rgba(34,197,94,0.12)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.02)'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.04)'; }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(34,197,94,0.08)' }}>
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                       </div>
                       <div>
-                        <span className="font-black text-slate-800 text-sm italic">{log.users?.email || 'Unknown Student'}</span>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{log.user_id}</p>
+                        <p className="font-bold text-sm" style={{ color: '#0f172a' }}>{log.users?.email || 'Unknown Student'}</p>
+                        <p className="text-[9px] font-black uppercase tracking-wider mt-0.5" style={{ color: '#94a3b8' }}>{log.user_id?.substring(0, 12)}...</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-black text-slate-900 leading-none">{log.time}</p>
-                      <p className="text-[9px] text-emerald-600 font-black uppercase mt-1 tracking-widest">{log.date}</p>
+                      <p className="font-black text-sm" style={{ color: '#0f172a' }}>{log.time}</p>
+                      <p className="text-[10px] font-bold mt-0.5" style={{ color: '#22c55e' }}>{log.date}</p>
                     </div>
                   </div>
                 ))}
-              </CardContent>
-            </Card>
+                {attendanceLogs.length === 0 && (
+                  <div className="col-span-2 text-center py-16" style={{ color: '#94a3b8' }}>
+                    <CheckCircle2 size={40} className="mx-auto mb-3 opacity-20" />
+                    <p className="text-sm font-bold">No sessions recorded yet</p>
+                  </div>
+                )}
+              </div>
+            </div>
           )}
 
           {/* QR SCANNER */}
           {activeTab === 'scanner' && (
-            <div className="max-w-2xl mx-auto space-y-8">
-              <Card className="rounded-[3rem] overflow-hidden border-none shadow-2xl bg-slate-900 p-2">
-                <div id="reader" className="rounded-[2.5rem] overflow-hidden border-8 border-slate-800 bg-black"></div>
-              </Card>
-              {scanResult && (
-                <div className="p-8 bg-emerald-500 text-white rounded-[2rem] font-black text-center animate-bounce shadow-2xl italic uppercase tracking-widest">
-                  ✅ Student Verified: {scanResult}
+            <div className="max-w-xl mx-auto space-y-5">
+              <div className="text-center mb-4">
+                <h2 className="text-lg font-black" style={{ color: '#0f172a' }}>QR Attendance Scanner</h2>
+                <p className="text-xs font-bold mt-1" style={{ color: '#94a3b8' }}>Position the student's QR code within the frame</p>
+              </div>
+
+              <div className="overflow-hidden rounded-[24px]" style={{ background: '#0b0f18', border: '1px solid rgba(255,255,255,0.06)', padding: '8px' }}>
+                <div id="reader" className="rounded-[18px] overflow-hidden" />
+              </div>
+
+              {scanResult ? (
+                <div className="flex items-center gap-4 px-6 py-5 rounded-[20px]" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)' }}>
+                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(34,197,94,0.15)' }}>
+                    <CheckCircle2 size={20} style={{ color: '#22c55e' }} />
+                  </div>
+                  <div>
+                    <p className="font-black text-sm" style={{ color: '#0f172a' }}>Attendance Recorded</p>
+                    <p className="text-xs mt-0.5 font-mono" style={{ color: '#64748b' }}>{scanResult}</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-3 px-6 py-4 rounded-[18px]" style={{ background: 'rgba(0,0,0,0.03)', border: '1px dashed rgba(0,0,0,0.1)' }}>
+                  <ScanLine size={16} style={{ color: '#94a3b8' }} />
+                  <p className="text-[11px] font-black uppercase tracking-widest" style={{ color: '#94a3b8' }}>Awaiting scan...</p>
                 </div>
               )}
-              <div className="text-center">
-                <p className="text-slate-400 text-xs font-black uppercase tracking-[0.3em]">Position the QR Code within the frame</p>
-              </div>
             </div>
           )}
 
-          {/* CERTIFICATE GENERATOR */}
+          {/* CERTIFICATE */}
           {activeTab === 'cert' && (
-            <Card className="max-w-xl mx-auto rounded-[3rem] p-16 text-center border-none shadow-2xl bg-white relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-2 bg-emerald-500"></div>
-              <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
-                <FiAward size={48} className="text-emerald-600" />
-              </div>
-              <h2 className="text-3xl font-black mb-2 text-slate-900 italic uppercase">Issue Credential</h2>
-              <p className="text-slate-400 text-sm mb-10 font-bold tracking-tight">Enter student details to generate official completion document.</p>
-              <div className="space-y-6">
-                <Input placeholder="STUDENT FULL NAME" className="py-8 text-center text-xl font-black rounded-2xl bg-slate-50 border-none uppercase tracking-tighter" value={certStudentName} onChange={e => setCertStudentName(e.target.value)} />
-                <Button onClick={handleGenerateCert} className="w-full py-8 bg-slate-900 hover:bg-black rounded-2xl text-white font-black uppercase italic tracking-[0.2em] shadow-xl">
-                  Download PDF Certificate
-                </Button>
-              </div>
-            </Card>
-          )}
+            <div className="max-w-md mx-auto">
+              <div className="rounded-[28px] overflow-hidden" style={{ ...card, padding: 0 }}>
+                {/* Top bar */}
+                <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg, #22c55e, #16a34a)' }} />
 
+                <div className="p-10 text-center">
+                  <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: 'rgba(34,197,94,0.08)', boxShadow: 'inset 0 0 0 1px rgba(34,197,94,0.15)' }}>
+                    <Award size={40} style={{ color: '#16a34a' }} />
+                  </div>
+
+                  <h2 className="text-xl font-black tracking-tight mb-2" style={{ color: '#0f172a' }}>Issue Certificate</h2>
+                  <p className="text-xs font-bold mb-8" style={{ color: '#94a3b8' }}>Generate an official completion document for a student</p>
+
+                  <div className="space-y-4">
+                    <input
+                      placeholder="STUDENT FULL NAME"
+                      className="w-full h-[56px] px-5 text-center font-black uppercase text-sm tracking-wider outline-none rounded-2xl transition-all"
+                      style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.08)', color: '#0f172a' }}
+                      value={certStudentName}
+                      onChange={e => setCertStudentName(e.target.value)}
+                      onFocus={e => { e.target.style.borderColor = 'rgba(34,197,94,0.4)'; e.target.style.background = 'rgba(34,197,94,0.03)'; }}
+                      onBlur={e => { e.target.style.borderColor = 'rgba(0,0,0,0.08)'; e.target.style.background = 'rgba(0,0,0,0.03)'; }}
+                    />
+                    <button
+                      onClick={handleGenerateCert}
+                      disabled={!certStudentName}
+                      className="w-full h-[52px] font-black text-[11px] tracking-[0.2em] uppercase text-white rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-40"
+                      style={{ background: '#0b0f18', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}
+                      onMouseEnter={e => { if (certStudentName) { e.currentTarget.style.background = '#1a2030'; e.currentTarget.style.transform = 'translateY(-1px)'; } }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#0b0f18'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                    >
+                      <Award size={15} /> Download PDF Certificate
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

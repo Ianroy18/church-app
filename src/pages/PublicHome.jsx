@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 
 // Shadcn UI Components
@@ -6,20 +6,20 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
+import { motion } from 'framer-motion';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
-// Lucide Icons
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
-import Play from 'lucide-react/dist/esm/icons/play';
-import MapPin from 'lucide-react/dist/esm/icons/map-pin';
-import Clock from 'lucide-react/dist/esm/icons/clock';
-import Users from 'lucide-react/dist/esm/icons/users';
-import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
-import ShieldCheck from 'lucide-react/dist/esm/icons/shield-check';
-import FileText from 'lucide-react/dist/esm/icons/file-text';
-import Heart from 'lucide-react/dist/esm/icons/heart';
-import Globe from 'lucide-react/dist/esm/icons/globe';
+import {
+  ArrowRight, Play, MapPin, Clock, Users,
+  MessageCircle, ShieldCheck, FileText, Heart, Globe
+} from 'lucide-react';
 
-// Custom Social Icons
 const FacebookIcon = ({ size = 18 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
 );
@@ -31,6 +31,80 @@ const YoutubeIcon = ({ size = 18 }) => (
 const InstagramIcon = ({ size = 18 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
 );
+
+const ChatSupportSection = () => {
+  return (
+    <section className="py-32 bg-white">
+      <div className="max-w-4xl mx-auto px-6 text-center scroll-reveal">
+        <span className="text-[#4CAF50] font-black tracking-[0.5em] text-[10px] uppercase italic block mb-4">Prayer & Support</span>
+        <h2 className="text-5xl md:text-6xl font-['Bebas_Neue',_sans-serif] italic tracking-tighter text-slate-900 mb-6 leading-none">
+          Do you just need someone to talk to?
+        </h2>
+        <p className="text-slate-600 mb-10 font-medium max-w-xl mx-auto uppercase text-xs tracking-widest leading-relaxed">
+          Our prayer warriors and counselors are here for you. We believe in the power of prayer and the strength of community.
+        </p>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="bg-[#4CAF50] hover:bg-[#3d8b40] text-white px-10 py-8 rounded-full text-sm font-bold uppercase tracking-[0.2em] transition-all hover:scale-105 shadow-xl">
+              <MessageCircle className="mr-3 h-5 w-5" />
+              Chat With Us
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent className="sm:max-w-[500px] bg-slate-900 border-none text-white p-0 overflow-hidden shadow-2xl">
+            <div className="relative">
+              <div className="h-32 bg-[#4CAF50] flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 opacity-20">
+                  <img src="/lcc1.png" className="w-full h-full object-cover scale-150 rotate-12" alt="bg" />
+                </div>
+                <Heart className="h-16 w-16 text-white animate-pulse relative z-10" />
+              </div>
+
+              <div className="p-8">
+                <DialogHeader className="mb-8">
+                  <DialogTitle className="text-4xl font-['Bebas_Neue',_sans-serif] italic tracking-wide text-white text-center uppercase">
+                    We are here to pray for you
+                  </DialogTitle>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                  <a
+                    href="https://m.me/LifeCareCenterCDO"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-5 p-5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all group"
+                  >
+                    <div className="h-14 w-14 rounded-full bg-[#4CAF50]/20 flex items-center justify-center text-[#4CAF50] group-hover:scale-110 transition-transform">
+                      <MessageCircle size={28} />
+                    </div>
+                    <div className="text-left">
+                      <h4 className="font-bold text-base uppercase tracking-wider">Facebook Messenger</h4>
+                      <p className="text-[10px] text-slate-400 tracking-[0.1em] uppercase">Talk to our counselors now</p>
+                    </div>
+                  </a>
+
+                  <button className="w-full flex items-center gap-5 p-5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all group text-left">
+                    <div className="h-14 w-14 rounded-full bg-[#4CAF50]/20 flex items-center justify-center text-[#4CAF50] group-hover:scale-110 transition-transform">
+                      <ShieldCheck size={28} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-base uppercase tracking-wider">Prayer Request</h4>
+                      <p className="text-[10px] text-slate-400 tracking-[0.1em] uppercase">Private and confidential request</p>
+                    </div>
+                  </button>
+                </div>
+                <p className="text-[10px] text-slate-500 text-center italic mt-8 uppercase tracking-widest">
+                  "Where two or three are gathered in my name, there am I."
+                </p>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </section>
+  );
+};
 
 function PublicHome() {
   useEffect(() => {
@@ -49,36 +123,39 @@ function PublicHome() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-[#4CAF50]/30 selection:text-slate-900">
+    <div className="min-h-screen bg-white font-sans selection:bg-[#4CAF50]/30 selection:text-slate-900 overflow-x-hidden">
       <Navbar />
 
       <main>
-        {/* --- HERO SECTION (ID: top) --- */}
         <section id="top" className="relative h-[95vh] flex items-center justify-center overflow-hidden bg-slate-950">
           <div className="absolute inset-0 z-0">
             <img
-              src="/lcbg.jpg"
-              className="w-full h-full object-cover opacity-40"
+              src="images/bible_study.png"
+              className="w-full h-full object-cover opacity-40 scale-105"
               alt="Worship"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/20 to-slate-950"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/40 to-slate-950" />
           </div>
 
-          <div className="relative z-10 text-center px-6 max-w-5xl">
-            <Badge variant="outline" className="text-[#4CAF50] border-[#4CAF50] px-4 py-1 tracking-[0.4em] uppercase mb-8">
+          <div className="relative z-10 text-center px-6 max-w-6xl">
+            <Badge variant="outline" className="text-[#4CAF50] border-[#4CAF50] px-4 py-1.5 tracking-[0.4em] uppercase mb-8 text-[10px]">
               Grace and Truth Life Care Centre
             </Badge>
-            <h1 className="text-white text-5xl md:text-7xl lg:text-[7.5rem] font-black tracking-tighter leading-[0.9] mb-10 uppercase italic">
+
+            <h1 className="text-white text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-10 uppercase italic font-['Bebas_Neue',_sans-serif]">
               Know Christ <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/60 to-white/20">And Make Him Known</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/80 via-white/40 to-white/10 italic">
+                And Make Him Known
+              </span>
             </h1>
+
             <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-              <Button asChild className="bg-[#4CAF50] hover:bg-[#439c47] text-white px-10 py-8 rounded-none font-bold text-xs tracking-[0.2em] transition-all hover:scale-105 shadow-[0_0_40px_rgba(76,175,80,0.3)]">
+              <Button asChild size="lg" className="bg-[#4CAF50] hover:bg-[#439c47] text-white px-8 py-7 rounded-none font-bold text-xs tracking-[0.2em] transition-all hover:scale-105 shadow-[0_0_40px_rgba(76,175,80,0.3)]">
                 <a href="https://web.facebook.com/LifeCareCenterCDO/videos" target="_blank" rel="noreferrer">
                   WATCH LATEST MESSAGE <Play className="ml-3 fill-current" size={14} />
                 </a>
               </Button>
-              <Button variant="ghost" asChild className="text-white hover:text-[#4CAF50] hover:bg-white/5 font-bold tracking-[0.2em] text-xs group uppercase">
+              <Button variant="ghost" asChild size="lg" className="text-white hover:text-[#4CAF50] hover:bg-white/5 font-bold tracking-[0.2em] text-xs group uppercase">
                 <a href="#about" className="flex items-center">
                   Learn More <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" size={16} />
                 </a>
@@ -87,132 +164,225 @@ function PublicHome() {
           </div>
         </section>
 
-        {/* --- SERVICE INFO / ABOUT (ID: about) --- */}
-        <section id="about" className="relative z-20 -mt-20 max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-0 shadow-2xl rounded-sm overflow-hidden border-none scroll-reveal">
-            <Card className="bg-[#4CAF50] border-none rounded-none text-white p-6">
-              <CardContent className="pt-6 flex flex-col items-center text-center">
-                <Clock className="mb-4 opacity-80" size={40} />
-                <h3 className="font-black tracking-tighter text-2xl mb-1 uppercase italic">Sunday Service</h3>
-                <p className="text-white/80 text-sm font-bold tracking-widest uppercase">9:00 AM & 4:00 PM</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-slate-900 border-none rounded-none text-white p-6">
-              <CardContent className="pt-6 flex flex-col items-center text-center">
-                <MapPin className="mb-4 opacity-80" size={40} />
-                <h3 className="font-black tracking-tighter text-2xl mb-1 uppercase italic">Location</h3>
-                <p className="text-white/80 text-[10px] font-bold tracking-widest uppercase italic text-center">2F Jofel Bldg, Mortola St., CDO</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-white border-none rounded-none text-slate-900 p-6">
-              <CardContent className="pt-6 flex flex-col items-center text-center">
-                <Users className="mb-4 text-[#4CAF50]" size={40} />
-                <h3 className="font-black tracking-tighter text-2xl mb-1 uppercase italic">D-Groups</h3>
-                <p className="text-slate-500 text-sm font-bold tracking-widest uppercase italic">Discipleship community</p>
-              </CardContent>
-            </Card>
+        <section id="team" className="py-32 bg-slate-950 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-20 scroll-reveal">
+              <span className="text-[#4CAF50] font-black tracking-[0.5em] text-[10px] uppercase italic block mb-4">Our Leadership</span>
+              <h2 className="text-5xl md:text-7xl font-['Bebas_Neue',_sans-serif] tracking-tighter uppercase italic text-white leading-none">Meet the Team</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+              {[
+                { name: "Amb. Genard Ganapin", role: "Ambassador", img: "/G3.png", focus: "Community Outreach" },
+                { name: "Ptr. Blaine Jakosalem", role: "Lead Pastor", img: "/B3.png", focus: "Spiritual Direction" },
+                { name: "Amb. Louis Gio Noval", role: "Ambassador", img: "/L3.png", focus: "Media & Communications" }
+              ].map((member, i) => (
+                <motion.div
+                  key={i}
+                  whileHover={{ y: -15, rotateX: 5, rotateY: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="scroll-reveal group"
+                  style={{ perspective: "1000px" }}
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden mb-8 rounded-sm shadow-2xl border-b-[6px] border-[#4CAF50]">
+                    <img
+                      src={member.img}
+                      className="w-full h-full object-cover object-top"
+                      alt={member.name}
+                    />
+                    <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <h4 className="font-['Bebas_Neue',_sans-serif] text-4xl tracking-tighter italic uppercase text-white leading-none">
+                      {member.name}
+                    </h4>
+                    <div className="flex flex-col">
+                      <span className="text-[#4CAF50] font-black tracking-[0.2em] text-[10px] uppercase italic">
+                        {member.role}
+                      </span>
+                      <span className="text-slate-400 font-bold text-[9px] uppercase tracking-widest mt-1">
+                        {member.focus}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* --- NEXT STEPS / MINISTRIES (ID: next-steps) --- */}
-        <section id="next-steps" className="py-48">
-          <div className="max-w-7xl mx-auto px-6 text-center mb-24 scroll-reveal">
-            <span className="text-[#4CAF50] font-black tracking-[0.4em] text-[10px] uppercase italic">Get Involved</span>
-            <h2 className="text-7xl font-black tracking-tighter uppercase italic text-slate-900 leading-none mt-4">Your Next Step</h2>
+        {/* INFO CARDS */}
+        <section id="about" className="relative z-20 -mt-24 max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-8">
+
+            {/* CARD 1: SUNDAY SERVICE */}
+            <motion.div
+              whileHover={{ y: -15, rotateX: 5, rotateY: 5 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              style={{ perspective: "1000px" }}
+            >
+              <Card className="bg-[#4CAF50] border-none rounded-sm text-white p-10 h-full shadow-2xl group cursor-default">
+                <CardContent className="flex flex-col items-center text-center p-0">
+                  <div className="h-16 w-16 bg-white/10 rounded-full flex items-center justify-center mb-6 group-hover:bg-white group-hover:text-[#4CAF50] transition-all duration-500">
+                    <Clock size={32} />
+                  </div>
+                  <h3 className="font-['Bebas_Neue',_sans-serif] tracking-tighter text-4xl mb-2 uppercase italic">Sunday Service</h3>
+                  <p className="text-white/90 text-[10px] font-black tracking-[0.3em] uppercase italic">9:00 AM & 4:00 PM</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* CARD 2: LOCATION */}
+            <motion.div
+              whileHover={{ y: -15, rotateX: 5, rotateY: -5 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              style={{ perspective: "1000px" }}
+            >
+              <Card className="bg-slate-900 border-none rounded-sm text-white p-10 h-full shadow-2xl group cursor-default">
+                <CardContent className="flex flex-col items-center text-center p-0">
+                  <div className="h-16 w-16 bg-white/5 rounded-full flex items-center justify-center mb-6 group-hover:bg-[#4CAF50] group-hover:text-white transition-all duration-500">
+                    <MapPin size={32} />
+                  </div>
+                  <h3 className="font-['Bebas_Neue',_sans-serif] tracking-tighter text-4xl mb-2 uppercase italic">Location</h3>
+                  <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="text-white/70 text-[10px] font-black tracking-[0.2em] uppercase italic hover:text-[#4CAF50] transition-colors">
+                    Calamansi Drive, Patag, <br /> Cagayan de Oro
+                  </a>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* CARD 3: D-GROUPS */}
+            <motion.div
+              whileHover={{ y: -15, rotateX: 5, rotateY: 5 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              style={{ perspective: "1000px" }}
+            >
+              <Card className="bg-white border-none rounded-sm text-slate-900 p-10 h-full shadow-2xl group cursor-default">
+                <CardContent className="flex flex-col items-center text-center p-0">
+                  <div className="h-16 w-16 bg-slate-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-[#4CAF50] group-hover:text-white transition-all duration-500">
+                    <Users size={32} className="text-[#4CAF50] group-hover:text-white" />
+                  </div>
+                  <h3 className="font-['Bebas_Neue',_sans-serif] tracking-tighter text-4xl mb-2 uppercase italic">D-Groups</h3>
+                  <p className="text-slate-500 text-[10px] font-black tracking-[0.3em] uppercase italic">Discipleship community</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
           </div>
-          <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12">
+        </section>
+
+        {/* NEXT STEPS SECTION */}
+        <section id="next-steps" className="py-32 bg-slate-800">
+          <div className="max-w-7xl mx-auto px-6 text-center mb-24 scroll-reveal">
+            <span className="text-[#4CAF50] font-black tracking-[0.5em] text-[10px] uppercase italic block mb-4">Get Involved</span>
+            <h2 className="text-5xl md:text-8xl font-['Bebas_Neue'] tracking-tighter uppercase italic text-white leading-none">Your Next Step</h2>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
             {[
-              { title: "I'm New Here", label: "01. Start Here", img: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=500" },
-              { title: "Join a D-Group", label: "02. Community", img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=500" },
-              { title: "Start Serving", label: "03. Volunteer", img: "https://images.unsplash.com/photo-1469571483350-f63005ff16bd?q=80&w=500" }
+              { title: "I'm New Here", label: "01. Start Here", img: "/1.jpg" },
+              { title: "Join a D-Group", label: "02. Community", img: "/2.jpg" },
+              { title: "Start Serving", label: "03. Volunteer", img: "/3.jpg" }
             ].map((step, i) => (
-              <div key={i} className="scroll-reveal group relative h-[500px] overflow-hidden cursor-pointer shadow-xl">
-                <img src={step.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0" alt={step.title} />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-90"></div>
-                <div className="absolute bottom-12 left-12 right-12 text-center">
-                  <span className="text-[#4CAF50] font-black tracking-[0.3em] text-[10px] uppercase mb-4 block italic">{step.label}</span>
-                  <h4 className="text-white font-black text-3xl tracking-tighter italic uppercase mb-6">{step.title}</h4>
+              <motion.div
+                key={i}
+                whileHover={{ y: -15, rotateX: 5, rotateY: 5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="scroll-reveal group relative h-[500px] overflow-hidden cursor-pointer shadow-2xl rounded-sm"
+                style={{ perspective: "1000px" }}
+              >
+                {/* Image - Inayos ang object-top para hindi maputol ang ulo */}
+                <img
+                  src={step.img}
+                  className="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105"
+                  alt={step.title}
+                />
+
+                {/* Dark Overlay - Mas pinatindi ang gradient para lumitaw ang puting text */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity" />
+
+                {/* Content Overlay */}
+                <div className="absolute bottom-12 left-0 right-0 text-center px-8 z-10">
+                  <span className="text-[#4CAF50] font-black tracking-[0.4em] text-[9px] uppercase mb-4 block italic">
+                    {step.label}
+                  </span>
+                  <h4 className="text-white font-['Bebas_Neue'] text-5xl tracking-tighter italic uppercase mb-6 leading-none">
+                    {step.title}
+                  </h4>
+
+                  {/* Animated Line */}
+                  <div className="h-1 w-16 bg-[#4CAF50] mx-auto scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
 
-        {/* --- CONTACT / CHAT SECTION (ID: contact) --- */}
-        <section id="contact" className="bg-slate-50 py-32 border-y border-slate-100">
-          <div className="max-w-4xl mx-auto px-6 text-center scroll-reveal">
-            <Heart className="mx-auto text-[#4CAF50] mb-8" size={48} />
-            <h3 className="text-slate-900 text-4xl md:text-5xl font-black tracking-tighter italic uppercase mb-4">Do you just need someone to talk to?</h3>
-            <p className="text-slate-500 font-bold tracking-widest uppercase text-sm mb-10 italic">Our prayer warriors and counselors are here for you.</p>
-            <div className="flex justify-center">
-              <Button asChild className="bg-[#4CAF50] hover:bg-[#439c47] rounded-full px-12 py-8 h-auto text-white font-bold tracking-[0.2em] text-sm uppercase shadow-2xl hover:scale-105 transition-all">
-                <a href="https://m.me/LifeCareCenterCDO" target="_blank" rel="noreferrer">
-                  CHAT WITH US! <MessageCircle className="ml-3" size={20} />
-                </a>
-              </Button>
-            </div>
-          </div>
-        </section>
+
+        {/* THE CHAT SUPPORT SECTION COMPONENT */}
+        <ChatSupportSection />
+
       </main>
 
-      {/* --- FOOTER --- */}
-      <footer className="bg-slate-950 py-24 px-6 text-white">
+      {/* FOOTER */}
+      <footer className="bg-slate-950 py-20 px-6 text-white border-t border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-20 mb-20">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-16 mb-16">
             <div className="space-y-8 text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start gap-4">
-                <img
-                  src="/favicon.png"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-[#4CAF50]/20"
-                  alt="LCC Logo"
-                  onError={(e) => { e.target.src = "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=100066636565507"; }}
-                />
-                <span className="font-black tracking-tighter text-3xl italic uppercase">LCC CDO</span>
+              <div className="flex items-center justify-center md:justify-start gap-5">
+
+                <span className="font-['Bebas_Neue',_sans-serif] tracking-widest text-3xl italic uppercase">LCC CDO</span>
               </div>
-              <div className="space-y-4">
-                <p className="text-slate-500 font-black text-[10px] tracking-widest uppercase italic">Stay Updated</p>
+              <div className="space-y-6">
+                <p className="text-slate-500 font-black text-[9px] tracking-[0.5em] uppercase italic">Stay Connected</p>
                 <div className="flex flex-col gap-4">
-                  <a href="https://web.facebook.com/LifeCareCenterCDO" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-3 text-xs font-bold tracking-tighter uppercase transition-colors">
+                  <a href="https://web.facebook.com/LifeCareCenterCDO" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-4 text-[10px] font-bold tracking-tighter uppercase transition-colors">
                     <FacebookIcon size={18} /> /LifeCareCenterCDO
                   </a>
-                  <a href="#" className="text-slate-400 hover:text-[#FF0000] flex items-center justify-center md:justify-start gap-3 text-xs font-bold tracking-tighter uppercase transition-colors">
+                  <a href="#" className="text-slate-400 hover:text-red-500 flex items-center justify-center md:justify-start gap-4 text-[10px] font-bold tracking-tighter uppercase transition-colors">
                     <YoutubeIcon size={18} /> /LifeCareCenterCDOmainTV
                   </a>
-                  <a href="#" className="text-slate-400 hover:text-[#E4405F] flex items-center justify-center md:justify-start gap-3 text-xs font-bold tracking-tighter uppercase transition-colors">
+                  <a href="#" className="text-slate-400 hover:text-pink-500 flex items-center justify-center md:justify-start gap-4 text-[10px] font-bold tracking-tighter uppercase transition-colors">
                     <InstagramIcon size={18} /> @lifecarecentercdo
                   </a>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-20 w-full md:w-auto text-center md:text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 w-full md:w-auto text-center md:text-left">
               <div className="space-y-6">
-                <h5 className="font-black text-[10px] tracking-[0.4em] uppercase italic text-slate-500">Legal</h5>
-                <ul className="space-y-4 text-xs font-bold tracking-widest uppercase">
-                  <li><a href="#" className="hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-2 transition-colors"><FileText size={14} /> Terms and Conditions</a></li>
-                  <li><a href="#" className="hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-2 transition-colors"><ShieldCheck size={14} /> Privacy Policy</a></li>
+                <h5 className="font-black text-[10px] tracking-[0.5em] uppercase italic text-slate-500">Legal & Privacy</h5>
+                <ul className="space-y-4 text-[10px] font-bold tracking-widest uppercase text-slate-400">
+                  <li><a href="#" className="hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-3 transition-colors"><FileText size={14} /> Terms</a></li>
+                  <li><a href="#" className="hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-3 transition-colors"><ShieldCheck size={14} /> Privacy</a></li>
                 </ul>
               </div>
               <div className="space-y-6">
-                <h5 className="font-black text-[10px] tracking-[0.4em] uppercase italic text-slate-500">Contact Us</h5>
-                <ul className="space-y-4 text-xs font-bold tracking-widest uppercase text-slate-400">
-                  <li className="flex items-center justify-center md:justify-start gap-2"><MapPin size={14} /> Mortola St., Cagayan de Oro</li>
-                  <li className="flex items-center justify-center md:justify-start gap-2"><Globe size={14} /> lcccdo.org</li>
+                <h5 className="font-black text-[10px] tracking-[0.5em] uppercase italic text-slate-500">Contact Us</h5>
+                <ul className="space-y-4 text-[10px] font-bold tracking-widest uppercase text-slate-400">
+                  <li className="flex items-center justify-center md:justify-start gap-3">
+                    <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:text-[#4CAF50] transition-colors">
+                      <MapPin size={14} className="text-[#4CAF50]" /> Calamansi Drive, Patag, CDO
+                    </a>
+                  </li>
+                  <li className="flex items-center justify-center md:justify-start gap-3"><Globe size={14} className="text-[#4CAF50]" /> lcccdo.org</li>
                 </ul>
               </div>
             </div>
           </div>
 
-          <Separator className="bg-white/5 mb-12" />
+          <Separator className="bg-white/10 mb-10" />
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-slate-600 text-[10px] font-black tracking-[0.4em] uppercase italic text-center">
-            <p>Grace and Truth Life Care Centre Inc. &copy; 2026</p>
-            <p className="text-white/20 hover:text-[#4CAF50] transition-colors cursor-default tracking-[1em]">Excellence</p>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-slate-600 text-[9px] font-black tracking-[0.5em] uppercase italic text-center">
+            <p className="hover:text-white transition-colors">Grace and Truth Life Care Centre Inc. © 2026</p>
+            <p className="text-[#4CAF50]/40 hover:text-[#4CAF50] transition-all cursor-default tracking-[1.5em] duration-700">Excellence</p>
           </div>
         </div>
       </footer>
     </div>
   );
 }
+
 
 export default PublicHome;
