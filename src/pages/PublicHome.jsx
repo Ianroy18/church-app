@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 
-// Shadcn UI Components
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { Separator } from '../components/ui/separator';
 import { motion } from 'framer-motion';
 import { cn } from "../lib/utils";
+import Footer from '../components/Footer';
 import {
   Dialog,
   DialogContent,
@@ -21,17 +20,6 @@ import {
   MessageCircle, ShieldCheck, FileText, Heart, Globe
 } from 'lucide-react';
 
-const FacebookIcon = ({ size = 18 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
-);
-
-const YoutubeIcon = ({ size = 18 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.4 5.58a2.78 2.78 0 0 0 1.94 2c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z" /><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" /></svg>
-);
-
-const InstagramIcon = ({ size = 18 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
-);
 
 const ChatSupportSection = () => {
   return (
@@ -432,62 +420,7 @@ function PublicHome() {
         <ChatSupportSection />
 
       </main>
-
-      {/* FOOTER */}
-      <footer className="bg-slate-950 py-20 px-6 text-white border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-16 mb-16">
-            <div className="space-y-8 text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start gap-5">
-
-                <span className="font-['Bebas_Neue',_sans-serif] tracking-widest text-3xl italic uppercase">LCC CDO</span>
-              </div>
-              <div className="space-y-6">
-                <p className="text-slate-500 font-black text-[9px] tracking-[0.5em] uppercase italic">Stay Connected</p>
-                <div className="flex flex-col gap-4">
-                  <a href="https://web.facebook.com/LifeCareCenterCDO" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-4 text-[10px] font-bold tracking-tighter uppercase transition-colors">
-                    <FacebookIcon size={18} /> /LifeCareCenterCDO
-                  </a>
-                  <a href="#" className="text-slate-400 hover:text-red-500 flex items-center justify-center md:justify-start gap-4 text-[10px] font-bold tracking-tighter uppercase transition-colors">
-                    <YoutubeIcon size={18} /> /LifeCareCenterCDOmainTV
-                  </a>
-                  <a href="#" className="text-slate-400 hover:text-pink-500 flex items-center justify-center md:justify-start gap-4 text-[10px] font-bold tracking-tighter uppercase transition-colors">
-                    <InstagramIcon size={18} /> @lifecarecentercdo
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 w-full md:w-auto text-center md:text-left">
-              <div className="space-y-6">
-                <h5 className="font-black text-[10px] tracking-[0.5em] uppercase italic text-slate-500">Legal & Privacy</h5>
-                <ul className="space-y-4 text-[10px] font-bold tracking-widest uppercase text-slate-400">
-                  <li><a href="#" className="hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-3 transition-colors"><FileText size={14} /> Terms</a></li>
-                  <li><a href="#" className="hover:text-[#4CAF50] flex items-center justify-center md:justify-start gap-3 transition-colors"><ShieldCheck size={14} /> Privacy</a></li>
-                </ul>
-              </div>
-              <div className="space-y-6">
-                <h5 className="font-black text-[10px] tracking-[0.5em] uppercase italic text-slate-500">Contact Us</h5>
-                <ul className="space-y-4 text-[10px] font-bold tracking-widest uppercase text-slate-400">
-                  <li className="flex items-center justify-center md:justify-start gap-3">
-                    <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:text-[#4CAF50] transition-colors">
-                      <MapPin size={14} className="text-[#4CAF50]" /> Calamansi Drive, Patag, CDO
-                    </a>
-                  </li>
-                  <li className="flex items-center justify-center md:justify-start gap-3"><Globe size={14} className="text-[#4CAF50]" /> lcccdo.org</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <Separator className="bg-white/10 mb-10" />
-
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-slate-600 text-[9px] font-black tracking-[0.5em] uppercase italic text-center">
-            <p className="hover:text-white transition-colors">Grace and Truth Life Care Centre Inc. © 2026</p>
-            <p className="text-[#4CAF50]/40 hover:text-[#4CAF50] transition-all cursor-default tracking-[1.5em] duration-700">Excellence</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

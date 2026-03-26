@@ -2,13 +2,18 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
 
-// Pages imports - Updated paths
+// Pages imports
 import PublicHome from './pages/PublicHome';
 import Login from './pages/auth/Login';
 import Register from './pages/Register';
 import StudentDashboard from './pages/StudentDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import ChatBot from './components/ChatBot'; // Import ng bagong ChatBot component
+import ChatBot from './components/ChatBot';
+import Resources from './pages/Resources';
+import MagazineFeed from './pages/MagazineFeed';
+import Articles from './pages/Articles';
+import SundayMessages from './pages/SundayMessages';
+import MemoryVerses from './pages/MemoryVerses';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -16,7 +21,6 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check Demo Mode
     const demo = localStorage.getItem('demoUser');
     if (demo) {
       const dUser = JSON.parse(demo);
@@ -26,7 +30,6 @@ function App() {
       return;
     }
 
-    // Initial session check
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         setUser(session.user);
@@ -35,7 +38,6 @@ function App() {
       setLoading(false);
     });
 
-    // Auth listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
         setUser(session.user);
@@ -84,25 +86,33 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<PublicHome />} />
         <Route path="/login" element={<Login user={user} role={role} />} />
         <Route path="/register" element={<Register user={user} role={role} />} />
+        <Route path="/resources" element={<Resources />} />
+        <Route path="/resources/magazine" element={<MagazineFeed />} />
+        <Route path="/resources/articles" element={<Articles />} />
+        <Route path="/resources/messages" element={<SundayMessages />} />
+        <Route path="/resources/verses" element={<MemoryVerses />} />
 
+        {/* Protected Student Routes */}
         <Route path="/dashboard" element={
           <ProtectedRoute requireStudent={true}>
             <StudentDashboard user={user} />
           </ProtectedRoute>
         } />
 
+        {/* Protected Admin Routes */}
         <Route path="/admin" element={
           <ProtectedRoute requireAdmin={true}>
             <AdminDashboard user={user} />
           </ProtectedRoute>
         } />
 
+        {/* Catch All */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-
 
       <ChatBot />
     </Router>
