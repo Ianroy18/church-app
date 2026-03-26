@@ -20,8 +20,8 @@ const Navbar = () => {
             title: "About",
             links: [
                 { name: "Who We Are", href: "#about-details" }, // Church Description section
-                { name: "Mission & Vision", href: "#mission-vision" },
-                { name: "Core Values", href: "#core-values" },
+                { name: "Mission & Vision", href: "#purpose" },
+                { name: "Core Values", href: "#purpose" },
                 { name: "Meet The Team", href: "#team" },
                 { name: "Location", href: "#about" },
                 { name: "Contact Us", href: "#contact" },
