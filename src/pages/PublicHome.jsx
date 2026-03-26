@@ -7,6 +7,7 @@ import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import { motion } from 'framer-motion';
+import { cn } from "../lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -142,7 +143,7 @@ function PublicHome() {
               Grace and Truth Life Care Centre
             </Badge>
 
-            <h1 className="text-white text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-10 uppercase italic font-['Bebas_Neue',_sans-serif]">
+            <h1 className="text-white text-3xl md:text-6xl lg:text-6xl font-black tracking-tighter leading-[0.9] mb-10 uppercase italic font-['Bebas_Neue',_sans-serif]">
               Know Christ <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/80 via-white/40 to-white/10 italic">
                 And Make Him Known
@@ -160,6 +161,113 @@ function PublicHome() {
                   Learn More <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" size={16} />
                 </a>
               </Button>
+            </div>
+          </div>
+        </section>
+        {/* --- MISSION, VISION, & CORE VALUES SECTION --- */}
+        <section id="purpose" className="py-32 bg-white overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6">
+
+            {/* Section Header */}
+            <div className="text-center mb-24 scroll-reveal">
+              <span className="text-[#4CAF50] font-black tracking-[0.5em] text-[10px] uppercase italic block mb-4">
+                Our Heart & Soul
+              </span>
+              <h2 className="text-5xl md:text-7xl font-['Bebas_Neue'] tracking-tighter uppercase italic text-slate-900 leading-none">
+                Purpose & Values
+              </h2>
+            </div>
+
+            {/* Floating Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              {[
+                {
+                  title: "Our Mission",
+                  subtitle: "What we do",
+                  content: "To know Christ and make Him known through authentic discipleship and selfless community service.",
+                  color: "bg-[#4CAF50]",
+                  textColor: "text-white",
+                  subColor: "text-white/60"
+                },
+                {
+                  title: "Our Vision",
+                  subtitle: "Where we're going",
+                  content: "A Christ-centered community living out the fullness of God's grace and truth to impact generations for His glory.",
+                  color: "bg-slate-950",
+                  textColor: "text-white",
+                  subColor: "text-white/40"
+                },
+                {
+                  title: "Core Values",
+                  subtitle: "How we live",
+                  content: "Integrity, Excellence, Discipleship, and Compassion in every action we take for the Kingdom.",
+                  color: "bg-[#ead143]",
+                  textColor: "text-slate-900",
+                  subColor: "text-[#4CAF50]"
+                }
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  whileHover={{ y: -20, rotateX: 5, rotateY: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="scroll-reveal h-full"
+                  style={{ perspective: "1000px" }}
+                >
+                  <Card className={cn(
+                    "relative h-full border-none rounded-sm shadow-2xl p-10 overflow-hidden group min-h-[400px] flex flex-col justify-center",
+                    item.color
+                  )}>
+                    {/* WATERMARK LOGO */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 pointer-events-none opacity-[0.15] group-hover:opacity-[0.1] transition-all duration-700">
+                      <img
+                        src="/favicon.png"
+                        alt="watermark"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    {/* Ghost Background Text */}
+                    <div className={cn(
+                      "absolute -right-2 -bottom-2 opacity-[0.05] group-hover:opacity-[0.1] transition-opacity duration-500 pointer-events-none",
+                      item.color === "bg-slate-950" ? "text-white" : "text-slate-900"
+                    )}>
+                      <h3 className="font-['Bebas_Neue'] text-7xl md:text-8xl uppercase italic leading-none tracking-tighter">
+                        {item.title.split(' ')[1] || item.title}
+                      </h3>
+                    </div>
+                    <CardContent className="p-0 relative z-10">
+                      {/* Subtitle */}
+                      <span className={cn(
+                        "font-black tracking-[0.4em] text-[9px] uppercase italic mb-4 block",
+                        item.subColor
+                      )}>
+                        {item.subtitle}
+                      </span>
+
+                      {/* Title */}
+                      <h3 className={cn(
+                        "font-['Bebas_Neue'] text-5xl tracking-tighter italic uppercase mb-8 leading-none",
+                        item.textColor
+                      )}>
+                        {item.title}
+                      </h3>
+
+                      {/* Handwritten Content - Ginamit ang Caveat font */}
+                      <p className={cn(
+                        "font-['Caveat'] text-4xl leading-tight transition-transform duration-500 group-hover:scale-105 origin-left",
+                        item.color === "bg-slate-50" ? "text-slate-600" : "text-white/90"
+                      )}>
+                        "{item.content}"
+                      </p>
+
+                      {/* Animated Accent Line */}
+                      <div className={cn(
+                        "h-1.5 w-12 mt-10 transition-all duration-500 group-hover:w-24",
+                        item.color === "bg-[#4CAF50]" ? "bg-white" : "bg-[#4CAF50]"
+                      )} />
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
