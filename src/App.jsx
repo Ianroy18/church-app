@@ -8,6 +8,7 @@ import Login from './pages/auth/Login';
 import Register from './pages/Register';
 import StudentDashboard from './pages/StudentDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import ChatBot from './components/ChatBot'; // Import ng bagong ChatBot component
 
 function App() {
   const [user, setUser] = useState(null);
@@ -101,6 +102,9 @@ function App() {
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+
+
+      <ChatBot />
     </Router>
   );
 }
