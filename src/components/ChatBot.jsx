@@ -8,7 +8,8 @@ const ChatBot = () => {
     const [message, setMessage] = useState("");
 
     return (
-        <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end font-['Montserrat']">
+        /* Main Wrapper: Inangat ang z-index sa 999 at ginawang responsive ang spacing */
+        <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[999] flex flex-col items-end font-['Montserrat']">
 
             {/* CHAT WINDOW */}
             <AnimatePresence>
@@ -17,7 +18,9 @@ const ChatBot = () => {
                         initial={{ opacity: 0, y: 20, scale: 0.9, transformOrigin: "bottom right" }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.9 }}
-                        className="mb-4 w-[320px] md:w-[360px] bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden flex flex-col h-[480px]"
+                        /* Width: calc(100vw - 32px) para hindi lumampas sa mobile screen side-to-side */
+                        /* Height: h-[70vh] para mag-adjust sa height ng phone */
+                        className="mb-4 w-[calc(100vw-32px)] sm:w-[320px] md:w-[360px] bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden flex flex-col h-[70vh] md:h-[480px]"
                     >
                         {/* Compact Premium Header */}
                         <div className="bg-slate-900 p-5 text-white flex justify-between items-start relative overflow-hidden">
@@ -32,7 +35,7 @@ const ChatBot = () => {
                                     <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#4CAF50] border-2 border-slate-900 rounded-full" />
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-[13px] tracking-tight">LCC Assistant</h4>
+                                    <h4 className="font-bold text-[13px] tracking-tight text-white">LCC Assistant</h4>
                                     <div className="flex items-center gap-1.5">
                                         <span className="w-1.5 h-1.5 bg-[#4CAF50] rounded-full animate-pulse" />
                                         <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Always Active</span>
@@ -81,7 +84,7 @@ const ChatBot = () => {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="p-3 bg-[#4CAF50] text-white rounded-xl shadow-lg shadow-[#4CAF50]/30 hover:bg-[#43a047] transition-colors"
+                                className="p-3 bg-[#4CAF50] text-white rounded-xl shadow-lg shadow-[#4CAF50]/30 hover:bg-[#43a047] transition-colors flex-shrink-0"
                             >
                                 <Send size={18} />
                             </motion.button>
@@ -95,8 +98,9 @@ const ChatBot = () => {
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(!isOpen)}
+                /* Responsive sizes: w-14 h-14 sa mobile, w-16 h-16 sa desktop */
                 className={cn(
-                    "w-14 h-14 rounded-2xl flex items-center justify-center shadow-[0_10px_30px_rgba(76,175,80,0.3)] transition-all duration-500 relative overflow-hidden",
+                    "w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center shadow-[0_10px_30px_rgba(76,175,80,0.3)] transition-all duration-500 relative overflow-hidden",
                     isOpen ? "bg-slate-900" : "bg-[#4CAF50]"
                 )}
             >
@@ -124,7 +128,7 @@ const ChatBot = () => {
                 </AnimatePresence>
 
                 {/* Visual Polish: Shine Effect */}
-                <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
+                <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 pointer-events-none" />
 
                 {!isOpen && (
                     <span className="absolute inset-0 rounded-2xl bg-[#4CAF50] animate-ping opacity-10" />
