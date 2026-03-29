@@ -29,8 +29,74 @@ const Resources = () => {
         { id: "glc", title: "GLC MODULES", iconName: "FileText", color: "bg-slate-950", textColor: "text-white", ghostColor: "text-white/10", accent: "bg-[#4CAF50]" },
         { id: "articles", title: "ARTICLES", iconName: "PenTool", color: "bg-[#4CAF50]", textColor: "text-white", ghostColor: "text-white/10", accent: "bg-white" },
         { id: "motivate", title: "MOTIVATE", iconName: "Heart", color: "bg-[#FFC107]", textColor: "text-slate-900", ghostColor: "text-slate-900/10", accent: "bg-[#4CAF50]" },
-        { id: "magazine", title: "COMMEMORATIVE MAGAZINE", iconName: "Layers", color: "bg-slate-950", textColor: "text-white", ghostColor: "text-white/10", accent: "bg-[#4CAF50]" },
+        { id: "magazine", title: "COMMEMORATIVE MAGAZINE", iconName: "Layers", color: "bg-[#4CAF50]", textColor: "text-white", ghostColor: "text-white/10", accent: "bg-white" },
     ];
+
+    const resourceDetails = {
+        messages: {
+            heading: 'Sunday Messages',
+            description: 'Weekly sermon teaching library. Includes video archives, study notes, and sermon series playlists.',
+            link: '/resources/messages',
+            keyPoints: [
+                'Faith-building sermon series',
+                'Worship teaching notes',
+                'Speaker insights and reflections'
+            ]
+        },
+        verses: {
+            heading: 'Memory Verses',
+            description: 'Daily scripture to memorize, meditate on, and share within the community for practical Christian growth.',
+            link: '/resources/verses',
+            keyPoints: [
+                'Top scripture reference cards',
+                'Share-to-social and copy link',
+                'Daily verse reminders'
+            ]
+        },
+        '4ws': {
+            heading: '4WS Guide',
+            description: 'A focused discipleship framework: Word, Worship, Witness, Work. Step-by-step practice guide for each week.',
+            link: '/resources/4ws',
+            keyPoints: ['Study plan', 'Worship action items', 'Evangelism prompts', 'Serving checklist']
+        },
+        chronicle: {
+            heading: 'Chronicle',
+            description: 'Ministry history and testimony archives. Stories of how God moved in the church through past events.',
+            link: '/resources/chronicle',
+            keyPoints: ['Milestone timelines', 'Transformational testimonies', 'Photos and narrative journals']
+        },
+        growth: {
+            heading: 'Growth Materials',
+            description: 'Resources to support spiritual discipleship: podcasts, small group studies, and personal development tracks.',
+            link: '/resources/growth',
+            keyPoints: ['Growth plans', 'Leader guides', 'Practice worksheets']
+        },
+        glc: {
+            heading: 'GLC Modules',
+            description: 'Structured curriculum for the Grace Life Center (GLC). Module downloads and lesson tracking for students.',
+            link: '/resources/glc',
+            keyPoints: ['Module PDF downloads', 'Progress tracking', 'Assessment templates']
+        },
+        articles: {
+            heading: 'Articles',
+            description: 'In-depth articles, devotionals and teaching notes from church leadership and invited authors.',
+            link: '/resources/articles',
+            keyPoints: ['Bible studies', 'Devotional insights', 'Practical faith application']
+        },
+        motivate: {
+            heading: 'Motivate',
+            description: 'Weekly encouragement content for mental and spiritual health, including quotes, stories, and life lessons.',
+            link: '/resources/motivate',
+            keyPoints: ['Inspirational quotes', 'Testimony snippets', 'Action challenges']
+        },
+        magazine: {
+            heading: 'Commemorative Magazine',
+            description: 'Periodical digital magazine archive for church events, campaigns, and special issues.',
+            link: '/resources/magazine',
+            keyPoints: ['Latest issue preview', 'Articles feature', 'Download options']
+        }
+    };
+
 
     return (
         <div className="min-h-screen bg-[#F1F5F9] font-['Montserrat'] overflow-x-hidden">
@@ -60,7 +126,24 @@ const Resources = () => {
                             <div
                                 key={item.id}
                                 id={item.id}
-                                onClick={() => window.location.href = `/resources/${item.id}`}
+                                onClick={() => {
+                                    const routeMap = {
+                                        messages: '/resources/messages',
+                                        verses: '/resources/verses',
+                                        articles: '/resources/articles',
+                                        magazine: '/resources/magazine',
+                                        '4ws': '/resources/4ws',
+                                        chronicle: '/resources/chronicle',
+                                        growth: '/resources/growth',
+                                        glc: '/resources/glc',
+                                        motivate: '/resources/motivate'
+                                    };
+                                    if (routeMap[item.id]) {
+                                        window.location.href = routeMap[item.id];
+                                    } else {
+                                        window.location.hash = item.id;
+                                    }
+                                }}
                                 className={`relative h-[480px] ${item.color} rounded-[3rem] p-12 overflow-hidden group 
                                     shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] border-b-[8px] border-black/10 
                                     flex flex-col justify-between scroll-mt-32 cursor-pointer transition-all duration-300
@@ -109,6 +192,80 @@ const Resources = () => {
                             </div>
                         );
                     })}
+                </div>
+            </section>
+
+            {/* Details Sections for each resource */}
+            <section className="py-24 px-6 max-w-7xl mx-auto border-t border-slate-200">
+                <h2 className="text-4xl md:text-5xl font-['Bebas_Neue'] italic text-slate-900 uppercase tracking-tight mb-12 text-center">
+                    Discover Resource Basics
+                </h2>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {Object.entries(resourceDetails).map(([key, detail]) => (
+                        <div key={key} id={`${key}-details`} className="bg-white rounded-3xl shadow-lg border border-slate-100 p-8">
+                            <div className="flex justify-between items-start mb-4">
+                                <h3 className="text-2xl font-bold text-slate-900 uppercase tracking-wide">{detail.heading}</h3>
+                                <span className="text-xs font-black uppercase tracking-wider text-slate-400">{key.toUpperCase()}</span>
+                            </div>
+                            <p className="text-slate-600 mb-4">{detail.description}</p>
+                            <ul className="list-disc list-inside text-slate-500 space-y-1 mb-6">
+                                {detail.keyPoints.map((point) => (
+                                    <li key={point}>{point}</li>
+                                ))}
+                            </ul>
+                            <div className="flex flex-wrap gap-3">
+                                <a
+                                    href={detail.link}
+                                    className="text-xs font-black uppercase py-2 px-5 rounded-full border border-[#4CAF50] text-[#4CAF50] hover:bg-[#4CAF50] hover:text-white transition-all"
+                                >
+                                    Open {detail.heading}
+                                </a>
+                                <a
+                                    href={key === 'messages' ? '/resources/messages' : '#'}
+                                    className="text-xs font-bold uppercase py-2 px-5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all"
+                                >
+                                    Learn More
+                                </a>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Full content blocks for each category */}
+            <section className="py-20 px-6 bg-white">
+                <div className="max-w-7xl mx-auto space-y-16">
+                    {Object.entries(resourceDetails).map(([key, detail]) => (
+                        <div key={key} id={key} className="rounded-3xl border border-slate-100 bg-slate-50 p-8 shadow-sm">
+                            <h3 className="text-3xl md:text-4xl font-['Bebas_Neue'] tracking-tight uppercase mb-4 text-slate-900">{detail.heading}</h3>
+                            <p className="text-slate-600 mb-6">{detail.description}</p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                {detail.keyPoints.slice(0, 4).map((item, idx) => (
+                                    <div key={item} className="rounded-2xl bg-white p-4 border border-slate-200 shadow-sm">
+                                        <h4 className="font-black text-sm uppercase text-[#4CAF50] tracking-wider mb-2">Step {idx + 1}</h4>
+                                        <p className="text-slate-500 text-sm">{item}</p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="flex flex-wrap gap-3">
+                                <a
+                                    className="rounded-full bg-[#4CAF50] text-white text-xs font-black uppercase tracking-wider px-5 py-2 hover:bg-[#3d8b40] transition-all"
+                                    href={detail.link}
+                                >
+                                    Open {detail.heading}
+                                </a>
+                                <a
+                                    className="rounded-full bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wider px-5 py-2 hover:bg-slate-300 transition-all"
+                                    href="#top"
+                                >
+                                    Back to top
+                                </a>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </section>
 

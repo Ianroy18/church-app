@@ -14,6 +14,12 @@ import AdminSidebar from "../../components/AdminSidebar";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
+import UsersTab from "./UsersTab";
+import LessonsTab from "./LessonsTab";
+import AttendanceTab from "./AttendanceTab";
+import ScannerTab from "./ScannerTab";
+import CertTab from "./CertTab";
+import MagazineTab from "./MagazineTab";
 
 function AdminDashboard({ user }) {
   const [activeTab, setActiveTab] = useState('lessons');

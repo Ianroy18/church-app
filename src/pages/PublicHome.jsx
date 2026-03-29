@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 import { Button } from '../components/ui/button';
@@ -7,95 +8,26 @@ import { Badge } from '../components/ui/badge';
 import { motion } from 'framer-motion';
 import { cn } from "../lib/utils";
 import Footer from '../components/Footer';
+import ChatSupportSection from '../components/ChatSupportSection';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 
 import {
   ArrowRight, Play, MapPin, Clock, Users,
-  MessageCircle, ShieldCheck, FileText, Heart, Globe
+  MessageCircle, ShieldCheck, FileText, Heart, Globe,
+  X, CheckCircle, Phone
 } from 'lucide-react';
 
 
-const ChatSupportSection = () => {
-  return (
-    <section className="py-32 bg-white">
-      <div className="max-w-4xl mx-auto px-6 text-center scroll-reveal">
-        <span className="text-[#4CAF50] font-black tracking-[0.5em] text-[10px] uppercase italic block mb-4">Prayer & Support</span>
-        <h2 className="text-5xl md:text-6xl font-['Bebas_Neue',_sans-serif] italic tracking-tighter text-slate-900 mb-6 leading-none">
-          Do you just need someone to talk to?
-        </h2>
-        <p className="text-slate-600 mb-10 font-medium max-w-xl mx-auto uppercase text-xs tracking-widest leading-relaxed">
-          Our prayer warriors and counselors are here for you. We believe in the power of prayer and the strength of community.
-        </p>
-
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-[#4CAF50] hover:bg-[#3d8b40] text-white px-10 py-8 rounded-full text-sm font-bold uppercase tracking-[0.2em] transition-all hover:scale-105 shadow-xl">
-              <MessageCircle className="mr-3 h-5 w-5" />
-              Chat With Us
-            </Button>
-          </DialogTrigger>
-
-          <DialogContent className="sm:max-w-[500px] bg-slate-900 border-none text-white p-0 overflow-hidden shadow-2xl">
-            <div className="relative">
-              <div className="h-32 bg-[#4CAF50] flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 opacity-20">
-                  <img src="/lcc1.png" className="w-full h-full object-cover scale-150 rotate-12" alt="bg" />
-                </div>
-                <Heart className="h-16 w-16 text-white animate-pulse relative z-10" />
-              </div>
-
-              <div className="p-8">
-                <DialogHeader className="mb-8">
-                  <DialogTitle className="text-4xl font-['Bebas_Neue',_sans-serif] italic tracking-wide text-white text-center uppercase">
-                    We are here to pray for you
-                  </DialogTitle>
-                </DialogHeader>
-
-                <div className="space-y-4">
-                  <a
-                    href="https://m.me/LifeCareCenterCDO"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-5 p-5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all group"
-                  >
-                    <div className="h-14 w-14 rounded-full bg-[#4CAF50]/20 flex items-center justify-center text-[#4CAF50] group-hover:scale-110 transition-transform">
-                      <MessageCircle size={28} />
-                    </div>
-                    <div className="text-left">
-                      <h4 className="font-bold text-base uppercase tracking-wider">Facebook Messenger</h4>
-                      <p className="text-[10px] text-slate-400 tracking-[0.1em] uppercase">Talk to our counselors now</p>
-                    </div>
-                  </a>
-
-                  <button className="w-full flex items-center gap-5 p-5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all group text-left">
-                    <div className="h-14 w-14 rounded-full bg-[#4CAF50]/20 flex items-center justify-center text-[#4CAF50] group-hover:scale-110 transition-transform">
-                      <ShieldCheck size={28} />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-base uppercase tracking-wider">Prayer Request</h4>
-                      <p className="text-[10px] text-slate-400 tracking-[0.1em] uppercase">Private and confidential request</p>
-                    </div>
-                  </button>
-                </div>
-                <p className="text-[10px] text-slate-500 text-center italic mt-8 uppercase tracking-widest">
-                  "Where two or three are gathered in my name, there am I."
-                </p>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-    </section>
-  );
-};
-
 function PublicHome() {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const revealElements = document.querySelectorAll('.scroll-reveal');
     const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -377,9 +309,9 @@ function PublicHome() {
 
           <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
             {[
-              { title: "I'm New Here", label: "01. Start Here", img: "/1.jpg" },
-              { title: "Join a D-Group", label: "02. Community", img: "/2.jpg" },
-              { title: "Start Serving", label: "03. Volunteer", img: "/3.jpg" }
+              { title: "I'm New Here", label: "01. Start Here", img: "/1.jpg", route: "/nextsteps/new-here" },
+              { title: "Join a D-Group", label: "02. Community", img: "/2.jpg", route: "/nextsteps/join-d-group" },
+              { title: "Start Serving", label: "03. Volunteer", img: "/3.jpg", route: "/nextsteps/start-serving" }
             ].map((step, i) => (
               <motion.div
                 key={i}
@@ -387,6 +319,7 @@ function PublicHome() {
                 transition={{ type: "spring", stiffness: 300 }}
                 className="scroll-reveal group relative h-[500px] overflow-hidden cursor-pointer shadow-2xl rounded-sm"
                 style={{ perspective: "1000px" }}
+                onClick={() => navigate(step.route)}
               >
                 {/* Image - Inayos ang object-top para hindi maputol ang ulo */}
                 <img

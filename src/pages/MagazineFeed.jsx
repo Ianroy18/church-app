@@ -129,6 +129,36 @@ const MagazineFeed = () => {
             likes_count: 42,
             shares_count: 12,
             magazine_comments: [1, 2, 3, 4, 5]
+        },
+        {
+            id: 'dummy-2',
+            author: 'Ptr. Blaine Jakosalem',
+            created_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+            description: 'This month\'s edition focuses on "Walking in Faith" - featuring testimonies from our community members who have experienced God\'s faithfulness in challenging times. Available now for download! 📖🙌',
+            cover_image: '/article.jpg',
+            likes_count: 67,
+            shares_count: 23,
+            magazine_comments: [1, 2, 3, 4, 5, 6, 7]
+        },
+        {
+            id: 'dummy-3',
+            author: 'Amb. Genard Ganapin',
+            created_at: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+            description: 'Grateful for the opportunity to share about our community outreach programs. The March edition includes stories of hope, transformation, and God\'s love in action. 🌟❤️',
+            cover_image: '/article.jpg',
+            likes_count: 89,
+            shares_count: 34,
+            magazine_comments: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        },
+        {
+            id: 'dummy-4',
+            author: 'LCC Media Team',
+            created_at: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
+            description: 'Behind the scenes: Our team working on the upcoming Easter special edition. Stay tuned for powerful messages of resurrection and new life! 🕊️✨',
+            cover_image: '/article.jpg',
+            likes_count: 156,
+            shares_count: 67,
+            magazine_comments: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         }
     ];
 

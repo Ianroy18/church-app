@@ -40,6 +40,62 @@ const MemoryVerses = () => {
             text: "Be strong and courageous. Do not be afraid; do not be discouraged.",
             category: "Courage",
             accent: "#9C27B0"
+        },
+        {
+            id: 5,
+            verse: "Jeremiah 29:11",
+            text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you.",
+            category: "Hope",
+            accent: "#FF9800"
+        },
+        {
+            id: 6,
+            verse: "Matthew 11:28",
+            text: "Come to me, all you who are weary and burdened, and I will give you rest.",
+            category: "Rest",
+            accent: "#00BCD4"
+        },
+        {
+            id: 7,
+            verse: "Romans 8:28",
+            text: "And we know that in all things God works for the good of those who love him.",
+            category: "Purpose",
+            accent: "#8BC34A"
+        },
+        {
+            id: 8,
+            verse: "Psalm 46:1",
+            text: "God is our refuge and strength, an ever-present help in trouble.",
+            category: "Protection",
+            accent: "#607D8B"
+        },
+        {
+            id: 9,
+            verse: "Ephesians 2:8-9",
+            text: "For it is by grace you have been saved, through faith—and this is not from yourselves, it is the gift of God.",
+            category: "Salvation",
+            accent: "#E91E63"
+        },
+        {
+            id: 10,
+            verse: "Isaiah 40:31",
+            text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles.",
+            category: "Renewal",
+            accent: "#3F51B5"
+        },
+        {
+            id: 11,
+            verse: "John 14:6",
+            text: "Jesus answered, 'I am the way and the truth and the life. No one comes to the Father except through me.'",
+            category: "Truth",
+            accent: "#795548"
+        },
+        {
+            id: 12,
+            verse: "Psalm 119:105",
+            text: "Your word is a lamp for my feet, a light on my path.",
+            category: "Guidance",
+            accent: "#009688"
         }
     ];
 

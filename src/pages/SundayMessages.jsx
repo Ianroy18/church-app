@@ -16,7 +16,7 @@ const SundayMessages = () => {
         {
             id: 1,
             title: "The Power of Radical Faith",
-            speaker: "Pastor Blaine jakusalem",
+            speaker: "Pastor Blaine Jakosalem",
             date: "March 22, 2026",
             series: "Faith Unshaken",
             thumbnail: "/images/hero_bg.png",
@@ -42,6 +42,66 @@ const SundayMessages = () => {
             thumbnail: "/images/community_group.png",
             duration: "42:30",
             category: "Series"
+        },
+        {
+            id: 4,
+            title: "Walking in God's Purpose",
+            speaker: "Amb. Genard Ganapin",
+            date: "March 1, 2026",
+            series: "Kingdom Living",
+            thumbnail: "/images/bible_study.png",
+            duration: "41:18",
+            category: "Series"
+        },
+        {
+            id: 5,
+            title: "The Heart of Worship",
+            speaker: "LCC Worship Team",
+            date: "February 22, 2026",
+            series: "Worship & Praise",
+            thumbnail: "/images/worship.png",
+            duration: "35:45",
+            category: "Stand-alone"
+        },
+        {
+            id: 6,
+            title: "Community and Fellowship",
+            speaker: "Pastor Blaine Jakosalem",
+            date: "February 15, 2026",
+            series: "Faith Unshaken",
+            thumbnail: "/images/community_group.png",
+            duration: "47:22",
+            category: "Series"
+        },
+        {
+            id: 7,
+            title: "Prayer: Our Direct Line to Heaven",
+            speaker: "Sis. Maria Santos",
+            date: "February 8, 2026",
+            series: "Spiritual Disciplines",
+            thumbnail: "/images/connect.png",
+            duration: "39:55",
+            category: "Series"
+        },
+        {
+            id: 8,
+            title: "Serving with Joy",
+            speaker: "Bro. Louis Noval",
+            date: "February 1, 2026",
+            series: "Kingdom Living",
+            thumbnail: "/images/community_service.png",
+            duration: "43:10",
+            category: "Series"
+        },
+        {
+            id: 9,
+            title: "The Great Commission Today",
+            speaker: "Amb. Genard Ganapin",
+            date: "January 25, 2026",
+            series: "Evangelism",
+            thumbnail: "/images/bible_study.png",
+            duration: "44:33",
+            category: "Stand-alone"
         }
     ];
 

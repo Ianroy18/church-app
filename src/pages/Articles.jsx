@@ -1,59 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     ArrowLeft, Search, BookOpen, Download,
     ExternalLink, Book, Star, Clock
 } from 'lucide-react';
+import { useSupabaseContent, getDummyData } from '../hooks/useSupabaseContent';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const Articles = () => {
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState("");
-
-    // DUMMY E-BOOKS DATA
-    const ebooks = [
-        {
-            id: 1,
-            title: "Understanding the Foundations of Faith",
-            author: "LCC Ministry",
-            category: "Bible Study",
-            description: "A comprehensive guide to the core beliefs and spiritual foundations of a Christian life.",
-            cover: "/images/bible_study.png", // Gamit ang images sa imong public folder
-            rating: 5,
-            pages: "124 Pages"
-        },
-        {
-            id: 2,
-            title: "Walking in Grace Daily",
-            author: "Pastor John Doe",
-            category: "Christian Living",
-            description: "Practical steps and daily devotionals to help you navigate life with God's grace.",
-            cover: "/images/connect.png",
-            rating: 4.8,
-            pages: "85 Pages"
-        },
-        {
-            id: 3,
-            title: "Leadership in the Church",
-            author: "Dr. Sarah Smith",
-            category: "Leadership",
-            description: "Empowering the next generation of leaders within the community and the church.",
-            cover: "/images/community_service.png",
-            rating: 4.9,
-            pages: "210 Pages"
-        },
-        {
-            id: 4,
-            title: "The Power of Prayer",
-            author: "LCC Worship Team",
-            category: "Spirituality",
-            description: "Deepening your connection with the Creator through consistent and heartfelt prayer.",
-            cover: "/images/worship.png",
-            rating: 5,
-            pages: "45 Pages"
-        }
-    ];
+    
+    // Fetch articles from Supabase
+    const { content: supabaseBooks, loading } = useSupabaseContent('articles');
+    
+    // Use Supabase data if available, otherwise fall back to dummy data
+    const ebooks = supabaseBooks.length > 0 ? supabaseBooks : getDummyData('articles');
 
     const filteredBooks = ebooks.filter(book =>
         book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -101,7 +64,7 @@ const Articles = () => {
                                 {/* Cover Image */}
                                 <div className="relative aspect-[3/4] overflow-hidden bg-slate-200">
                                     <img
-                                        src={book.cover}
+                                        src={book.image_url || book.cover}
                                         alt={book.title}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         onError={(e) => { e.target.src = "https://via.placeholder.com/300x400?text=Book+Cover"; }}

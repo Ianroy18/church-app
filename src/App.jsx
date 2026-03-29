@@ -14,6 +14,15 @@ import MagazineFeed from './pages/MagazineFeed';
 import Articles from './pages/Articles';
 import SundayMessages from './pages/SundayMessages';
 import MemoryVerses from './pages/MemoryVerses';
+import FourWSGuide from './pages/FourWSGuide';
+import Chronicle from './pages/Chronicle';
+import GrowthMaterials from './pages/GrowthMaterials';
+import GLCModules from './pages/GLCModules';
+import Motivate from './pages/Motivate';
+import NextStepsNewHere from './pages/NextStepsNewHere';
+import NextStepsJoinDGroup from './pages/NextStepsJoinDGroup';
+import NextStepsStartServing from './pages/NextStepsStartServing';
+import AdminContentManager from './pages/AdminContentManager';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -95,6 +104,14 @@ function App() {
         <Route path="/resources/articles" element={<Articles />} />
         <Route path="/resources/messages" element={<SundayMessages />} />
         <Route path="/resources/verses" element={<MemoryVerses />} />
+        <Route path="/resources/4ws" element={<FourWSGuide />} />
+        <Route path="/resources/chronicle" element={<Chronicle />} />
+        <Route path="/resources/growth" element={<GrowthMaterials />} />
+        <Route path="/resources/glc" element={<GLCModules />} />
+        <Route path="/resources/motivate" element={<Motivate />} />
+        <Route path="/nextsteps/new-here" element={<NextStepsNewHere />} />
+        <Route path="/nextsteps/join-d-group" element={<NextStepsJoinDGroup />} />
+        <Route path="/nextsteps/start-serving" element={<NextStepsStartServing />} />
 
         {/* Protected Student Routes */}
         <Route path="/dashboard" element={
@@ -107,6 +124,11 @@ function App() {
         <Route path="/admin" element={
           <ProtectedRoute requireAdmin={true}>
             <AdminDashboard user={user} />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/content" element={
+          <ProtectedRoute requireAdmin={true}>
+            <AdminContentManager />
           </ProtectedRoute>
         } />
 
