@@ -42,15 +42,15 @@ const Navbar = () => {
         {
             title: "Resources",
             links: [
-                { name: "Sunday Messages", href: "/resources#messages" },
-                { name: "Memory Verse", href: "/resources#verse" },
-                { name: "4WS", href: "/resources#4ws" },
-                { name: "Chronicle", href: "/resources#chronicle" },
-                { name: "Growth Materials", href: "/resources#growth" },
-                { name: "GLC", href: "/resources#glc" },
-                { name: "Articles", href: "/resources#articles" },
-                { name: "Motivate", href: "/resources#motivate" },
-                { name: "Commemorative Magazine", href: "/resources#magazine" },
+                { name: "Sunday Messages", href: "/resources/messages" },
+                { name: "Memory Verse", href: "/resources/verses" },
+                { name: "4WS", href: "/resources/4ws" },
+                { name: "Chronicle", href: "/resources/chronicle" },
+                { name: "Growth Materials", href: "/resources/growth" },
+                { name: "GLC", href: "/resources/glc" },
+                { name: "Articles", href: "/resources/articles" },
+                { name: "Motivate", href: "/resources/motivate" },
+                { name: "Commemorative Magazine", href: "/resources/magazine" },
             ]
         },
         {
