@@ -1,5 +1,3 @@
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
     Users,
     BookOpen,
@@ -9,7 +7,8 @@ import {
     LogOut,
     ShieldCheck,
     Activity,
-    ChevronRight
+    ChevronRight,
+    Newspaper
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -19,6 +18,7 @@ const AdminSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
         { id: 'attendance', label: 'Attendance', icon: CheckCircle, description: 'Live Session Logs', color: '#34d399' },
         { id: 'lessons', label: 'Modules', icon: BookOpen, description: 'Course Content', color: '#a78bfa' },
         { id: 'scanner', label: 'Scanner', icon: Camera, description: 'QR Verification', color: '#fb923c' },
+        { id: 'magazine', label: 'Magazine', icon: Newspaper, description: 'Public Feed', color: '#f59e0b' },
         { id: 'cert', label: 'Awards', icon: Award, description: 'Certificates', color: '#fbbf24' },
     ];
 

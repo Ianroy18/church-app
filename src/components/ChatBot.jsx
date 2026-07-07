@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, MoreHorizontal } from 'lucide-react';
 import { cn } from "../lib/utils";
@@ -21,6 +21,10 @@ const ChatBot = () => {
         }
     };
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
     const handleSend = async () => {
         if (!message.trim() || isLoading) return;
         if (!OPENAI_API_KEY) {
@@ -29,9 +33,10 @@ const ChatBot = () => {
         }
 
         const userMessage = message.trim();
+        const updatedMessages = [...messages, { role: 'user', content: userMessage }];
         setMessage('');
         setError(null);
-        setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
+        setMessages(updatedMessages);
         setIsLoading(true);
 
         try {
@@ -44,9 +49,8 @@ const ChatBot = () => {
                 body: JSON.stringify({
                     model: 'gpt-3.5-turbo',
                     messages: [
-                        { role: 'system', content: 'You are a helpful guide for the Grace and Truth Life Care Centre website.' },
-                        ...messages,
-                        { role: 'user', content: userMessage }
+                        { role: 'system', content: 'You are a helpful assistant for the Grace and Truth Life Care Centre website.' },
+                        ...updatedMessages,
                     ],
                     temperature: 0.7,
                     max_tokens: 500,
@@ -58,13 +62,12 @@ const ChatBot = () => {
                 throw new Error(data.error?.message || 'Unable to get AI response.');
             }
 
-            const aiText = data.choices?.[0]?.message?.content || 'Sorry, I could not generate a reply.';
+            const aiText = data.choices?.[0]?.message?.content?.trim() || 'Sorry, I could not generate a reply.';
             setMessages((prev) => [...prev, { role: 'assistant', content: aiText }]);
         } catch (err) {
             setError(err.message || 'Error sending message.');
         } finally {
             setIsLoading(false);
-            scrollToBottom();
         }
     };
 
@@ -151,22 +154,35 @@ const ChatBot = () => {
                         )}
 
                         {/* Minimalist Input Area */}
-                        <div className="p-4 bg-white border-t border-slate-50 flex gap-2 items-center">
+                        <form
+                            onSubmit={(event) => {
+                                event.preventDefault();
+                                handleSend();
+                            }}
+                            className="p-4 bg-white border-t border-slate-50 flex gap-2 items-center"
+                        >
                             <div className="flex-1 relative">
                                 <input
                                     type="text"
                                     placeholder="Type a message..."
                                     className="w-full bg-slate-100/80 border-none rounded-2xl px-4 py-3 text-[13px] focus:ring-2 focus:ring-[#4CAF50]/20 outline-none transition-all placeholder:text-slate-400"
                                     value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
+                                    onChange={(e) => {
+                                        setMessage(e.target.value);
+                                        if (error) setError(null);
+                                    }}
                                     onKeyDown={handleKeyPress}
                                     disabled={isLoading}
                                 />
+                                {isLoading && (
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] text-slate-400">Sending...</span>
+                                )}
                             </div>
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={handleSend}
+                                type="submit"
+                                whileHover={{ scale: isLoading ? 1 : 1.05 }}
+                                whileTap={{ scale: isLoading ? 1 : 0.95 }}
+                                disabled={isLoading}
                                 className={cn(
                                     'p-3 rounded-xl shadow-lg transition-colors flex-shrink-0',
                                     isLoading ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-[#4CAF50] text-white hover:bg-[#43a047] shadow-[#4CAF50]/30'
@@ -174,7 +190,7 @@ const ChatBot = () => {
                             >
                                 <Send size={18} />
                             </motion.button>
-                        </div>
+                        </form>
                     </motion.div>
                 )}
             </AnimatePresence>

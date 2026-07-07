@@ -1,5 +1,4 @@
 import { ChevronRight, LogOut, Activity, BookOpen, Download, Calendar, CheckCircle2, User } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const navItems = [
   { id: 'lessons', label: 'Course Modules', sub: 'Study Materials', icon: BookOpen, color: '#a78bfa' },
@@ -12,7 +11,7 @@ const navItems = [
 function StudentSidebar({ activeTab, setActiveTab, onLogout }) {
   return (
     <div
-      className="w-[260px] h-[calc(100vh-2rem)] flex flex-col m-4 rounded-[28px] overflow-hidden relative flex-shrink-0"
+      className="w-full max-w-[260px] h-[calc(100vh-2rem)] flex flex-col m-4 rounded-[28px] overflow-hidden relative flex-shrink-0"
       style={{
         background: '#0b0f18',
         border: '1px solid rgba(255,255,255,0.06)',

@@ -23,7 +23,7 @@ import {
 
 const ChatSupportSection = () => {
   const [leaders] = useState([
-    { id: 1, name: 'Amb. Genard Ganapin', role: 'Ambassador', messenger: 'https://m.me/AmbGenard', phone: '+63 912 345 6789' },
+    { id: 1, name: 'Amb. Genard Ganapin', role: 'Ambassador', messenger: 'https://www.messenger.com/t/100047233473984', phone: '+63 912 345 6789' },
     { id: 2, name: 'Ptr. Blaine Jakosalem', role: 'Lead Pastor', messenger: 'https://m.me/BlaineJakosalem', phone: '+63 918 765 4321' },
     { id: 3, name: 'Sis. Maria Santos', role: 'Prayer Team Lead', messenger: 'https://m.me/MariaSantos', phone: '+63 917 555 1234' },
   ]);
