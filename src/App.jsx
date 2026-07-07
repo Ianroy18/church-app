@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
 
@@ -85,6 +85,23 @@ function App() {
     );
   }
 
+  const ScrollToHash = () => {
+    const { hash } = useLocation();
+
+    useEffect(() => {
+      if (hash) {
+        const target = document.getElementById(hash.replace('#', ''));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, [hash]);
+
+    return null;
+  };
+
   const ProtectedRoute = ({ children, requireAdmin, requireStudent }) => {
     if (!user) return <Navigate to="/login" />;
     if (requireAdmin && role !== 'admin') return <Navigate to="/dashboard" />;
@@ -94,6 +111,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToHash />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<PublicHome />} />

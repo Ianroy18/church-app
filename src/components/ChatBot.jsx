@@ -1,11 +1,79 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, MoreHorizontal } from 'lucide-react';
 import { cn } from "../lib/utils";
 
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState([
+        { role: 'assistant', content: 'Blessed day! I am here to help you navigate Grace and Truth Life Care Centre. Ask me anything.' }
+    ]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    const handleSend = async () => {
+        if (!message.trim() || isLoading) return;
+        if (!OPENAI_API_KEY) {
+            setError('OpenAI API key is missing. Please add VITE_OPENAI_API_KEY to your .env file.');
+            return;
+        }
+
+        const userMessage = message.trim();
+        setMessage('');
+        setError(null);
+        setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
+        setIsLoading(true);
+
+        try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: 'gpt-3.5-turbo',
+                    messages: [
+                        { role: 'system', content: 'You are a helpful guide for the Grace and Truth Life Care Centre website.' },
+                        ...messages,
+                        { role: 'user', content: userMessage }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 500,
+                }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error?.message || 'Unable to get AI response.');
+            }
+
+            const aiText = data.choices?.[0]?.message?.content || 'Sorry, I could not generate a reply.';
+            setMessages((prev) => [...prev, { role: 'assistant', content: aiText }]);
+        } catch (err) {
+            setError(err.message || 'Error sending message.');
+        } finally {
+            setIsLoading(false);
+            scrollToBottom();
+        }
+    };
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSend();
+        }
+    };
 
     return (
         /* Main Wrapper: Inangat ang z-index sa 999 at ginawang responsive ang spacing */
@@ -58,17 +126,29 @@ const ChatBot = () => {
 
                         {/* Messages Area */}
                         <div className="flex-1 p-5 overflow-y-auto bg-slate-50/50 space-y-4">
-                            <div className="flex gap-2.5">
-                                <div className="w-7 h-7 bg-white rounded-full shadow-sm p-1 self-end border border-slate-100">
-                                    <img src="/favicon.png" alt="bot" className="w-full h-full object-contain" />
+                            {messages.map((entry, index) => (
+                                <div
+                                    key={`${entry.role}-${index}`}
+                                    className={`flex ${entry.role === 'assistant' ? 'gap-2' : 'justify-end'}`}
+                                >
+                                    {entry.role === 'assistant' && (
+                                        <div className="w-7 h-7 bg-white rounded-full shadow-sm p-1 self-end border border-slate-100">
+                                            <img src="/favicon.png" alt="bot" className="w-full h-full object-contain" />
+                                        </div>
+                                    )}
+                                    <div className={`rounded-2xl p-4 shadow-sm border border-slate-100 max-w-[85%] ${entry.role === 'assistant' ? 'bg-white' : 'bg-[#4CAF50] text-white rounded-br-none'}`}>
+                                        <p className={entry.role === 'assistant' ? 'text-[15px] text-slate-700 leading-snug font-[\'Caveat\']' : 'text-[15px] leading-snug'}>
+                                            {entry.content}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="bg-white p-4 rounded-2xl rounded-bl-none shadow-sm border border-slate-100 max-w-[85%]">
-                                    <p className="text-[15px] text-slate-700 leading-snug font-['Caveat'] text-2xl">
-                                        "Blessed day! I'm here to help you navigate through Grace and Truth Life Care Centre. How can I assist you today?"
-                                    </p>
-                                </div>
-                            </div>
+                            ))}
+                            <div ref={messagesEndRef} />
                         </div>
+
+                        {error && (
+                            <div className="px-4 pb-2 text-xs text-red-600 bg-red-50 border-t border-red-100">{error}</div>
+                        )}
 
                         {/* Minimalist Input Area */}
                         <div className="p-4 bg-white border-t border-slate-50 flex gap-2 items-center">
@@ -79,12 +159,18 @@ const ChatBot = () => {
                                     className="w-full bg-slate-100/80 border-none rounded-2xl px-4 py-3 text-[13px] focus:ring-2 focus:ring-[#4CAF50]/20 outline-none transition-all placeholder:text-slate-400"
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
+                                    onKeyDown={handleKeyPress}
+                                    disabled={isLoading}
                                 />
                             </div>
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="p-3 bg-[#4CAF50] text-white rounded-xl shadow-lg shadow-[#4CAF50]/30 hover:bg-[#43a047] transition-colors flex-shrink-0"
+                                onClick={handleSend}
+                                className={cn(
+                                    'p-3 rounded-xl shadow-lg transition-colors flex-shrink-0',
+                                    isLoading ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-[#4CAF50] text-white hover:bg-[#43a047] shadow-[#4CAF50]/30'
+                                )}
                             >
                                 <Send size={18} />
                             </motion.button>

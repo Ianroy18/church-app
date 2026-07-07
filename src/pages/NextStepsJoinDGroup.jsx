@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { ArrowLeft, Users, MessageCircle } from 'lucide-react';
@@ -47,9 +47,9 @@ const NextStepsJoinDGroup = () => {
               ))}
             </div>
 
-            <a href="/resources/glc" className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#4CAF50] text-white px-5 py-3 font-bold uppercase tracking-wider hover:bg-[#3d8b40] transition">
+            <Link to="/resources/glc" className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#4CAF50] text-white px-5 py-3 font-bold uppercase tracking-wider hover:bg-[#3d8b40] transition">
               <MessageCircle size={16} /> Register For D-Group
-            </a>
+            </Link>
           </section>
         </div>
       </main>

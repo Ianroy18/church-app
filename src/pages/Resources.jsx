@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import * as LucideIcons from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -7,6 +7,7 @@ import ChatBot from '../components/ChatBot';
 
 const Resources = () => {
     const { hash } = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (hash) {
@@ -139,9 +140,9 @@ const Resources = () => {
                                         motivate: '/resources/motivate'
                                     };
                                     if (routeMap[item.id]) {
-                                        window.location.href = routeMap[item.id];
+                                        navigate(routeMap[item.id]);
                                     } else {
-                                        window.location.hash = item.id;
+                                        navigate(`#${item.id}`);
                                     }
                                 }}
                                 className={`relative h-[480px] ${item.color} rounded-[3rem] p-12 overflow-hidden group 
