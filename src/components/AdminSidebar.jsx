@@ -24,7 +24,7 @@ const AdminSidebar = ({ activeTab, setActiveTab, handleLogout }) => {
 
     return (
         <div
-            className="w-[270px] h-[calc(100vh-2rem)] flex flex-col m-4 rounded-[28px] overflow-hidden relative flex-shrink-0"
+            className="w-full max-w-[270px] lg:w-[270px] h-auto lg:h-[calc(100vh-2rem)] flex flex-col m-4 lg:m-4 rounded-[28px] overflow-hidden relative flex-shrink-0 mx-auto lg:mx-0"
             style={{
                 background: '#0b0f18',
                 border: '1px solid rgba(255,255,255,0.06)',

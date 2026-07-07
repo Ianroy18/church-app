@@ -4,6 +4,7 @@ import { MessageCircle, X, Send, MoreHorizontal } from 'lucide-react';
 import { cn } from "../lib/utils";
 
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+const hasOpenAIKey = Boolean(OPENAI_API_KEY);
 
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -149,7 +150,12 @@ const ChatBot = () => {
                             <div ref={messagesEndRef} />
                         </div>
 
-                        {error && (
+                        {!hasOpenAIKey && (
+                            <div className="px-4 py-3 text-sm text-slate-800 bg-amber-100 rounded-2xl border border-amber-200 mb-3">
+                                OpenAI API key is not configured yet. Please add <span className="font-semibold">VITE_OPENAI_API_KEY</span> to your local <span className="font-semibold">.env</span> file so the assistant can respond.
+                            </div>
+                        )}
+                        {error && hasOpenAIKey && (
                             <div className="px-4 pb-2 text-xs text-red-600 bg-red-50 border-t border-red-100">{error}</div>
                         )}
 

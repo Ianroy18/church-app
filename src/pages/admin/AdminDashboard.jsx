@@ -163,16 +163,16 @@ function AdminDashboard({ user }) {
   const filteredUsers = usersList.filter(u => u.email?.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
-    <div className="flex h-screen font-sans overflow-hidden" style={{ background: '#f1f5f3' }}>
+    <div className="flex flex-col lg:flex-row min-h-screen font-sans overflow-hidden" style={{ background: '#f1f5f3' }}>
 
       <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} handleLogout={handleLogout} />
 
-      <div className="flex-1 overflow-y-auto p-4 pl-0 min-w-0" style={{ scrollbarWidth: 'none' }}>
+      <div className="flex-1 overflow-y-auto p-4 min-w-0" style={{ scrollbarWidth: 'none' }}>
 
         {/* ── HEADER ── */}
-        <div className="flex justify-between items-start mb-5 gap-5">
+        <div className="flex flex-col xl:flex-row justify-between items-start mb-5 gap-5">
           <div className="flex-1 p-7 rounded-[24px]" style={{ background: '#0b0f18', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-black text-white tracking-tight">Admin Dashboard</h1>
                 <div className="flex items-center gap-2 mt-1.5">
@@ -180,7 +180,7 @@ function AdminDashboard({ user }) {
                   <p className="text-[10px] font-black tracking-[0.3em] uppercase" style={{ color: 'rgba(34,197,94,0.7)' }}>Grace & Truth Management Portal</p>
                 </div>
               </div>
-              <div className="flex gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 w-full">
                 {statCards.map(({ label, value, icon: Icon, color, bg, border }) => (
                   <div key={label} className="px-5 py-3 rounded-2xl text-center" style={{ background: bg, border: `1px solid ${border}` }}>
                     <p className="text-2xl font-black text-white leading-none">{value}</p>
@@ -212,7 +212,7 @@ function AdminDashboard({ user }) {
           {/* USERS */}
           {activeTab === 'users' && (
             <div style={{ ...card, overflow: 'hidden', padding: 0 }}>
-              <div className="px-8 py-6 flex justify-between items-center" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+              <div className="px-4 sm:px-8 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(96,165,250,0.1)' }}>
                     <Users size={18} style={{ color: '#2563eb' }} />
@@ -234,8 +234,9 @@ function AdminDashboard({ user }) {
                 </div>
               </div>
 
-              <table className="w-full">
-                <thead style={{ background: 'rgba(0,0,0,0.02)' }}>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[640px]">
+                  <thead style={{ background: 'rgba(0,0,0,0.02)' }}>
                   <tr>
                     <th className="px-8 py-4 text-left text-[9px] font-black tracking-[0.3em] uppercase" style={{ color: '#94a3b8' }}>Email Address</th>
                     <th className="px-8 py-4 text-left text-[9px] font-black tracking-[0.3em] uppercase" style={{ color: '#94a3b8' }}>Role</th>
@@ -260,7 +261,8 @@ function AdminDashboard({ user }) {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+                </table>
+              </div>
             </div>
           )}
 
