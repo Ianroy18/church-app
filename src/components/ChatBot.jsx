@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, MoreHorizontal } from 'lucide-react';
 import { cn } from "../lib/utils";
 
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-const hasOpenAIKey = Boolean(OPENAI_API_KEY);
+const hasAiKey = Boolean(GEMINI_API_KEY || OPENAI_API_KEY);
+const usesGemini = Boolean(GEMINI_API_KEY);
 
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,8 +30,8 @@ const ChatBot = () => {
 
     const handleSend = async () => {
         if (!message.trim() || isLoading) return;
-        if (!OPENAI_API_KEY) {
-            setError('OpenAI API key is missing. Please add VITE_OPENAI_API_KEY to your .env file.');
+        if (!hasAiKey) {
+            setError('AI API key is missing. Please add VITE_GEMINI_API_KEY or VITE_OPENAI_API_KEY to your .env.local file.');
             return;
         }
 
@@ -41,29 +43,63 @@ const ChatBot = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: 'gpt-3.5-turbo',
-                    messages: [
-                        { role: 'system', content: 'You are a helpful assistant for the Grace and Truth Life Care Centre website.' },
-                        ...updatedMessages,
-                    ],
-                    temperature: 0.7,
-                    max_tokens: 500,
-                }),
-            });
+            let aiText = 'Sorry, I could not generate a reply.';
 
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.error?.message || 'Unable to get AI response.');
+            if (usesGemini) {
+                const prompt = [
+                    'You are a helpful assistant for the Grace and Truth Life Care Centre website.',
+                    '',
+                    'Conversation history:',
+                    ...updatedMessages.map((entry) => `${entry.role === 'user' ? 'User' : 'Assistant'}: ${entry.content}`),
+                ].join('\n');
+
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                role: 'user',
+                                parts: [{ text: prompt }],
+                            },
+                        ],
+                    }),
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error?.message || 'Unable to get AI response.');
+                }
+
+                aiText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || aiText;
+            } else {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${OPENAI_API_KEY}`,
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-3.5-turbo',
+                        messages: [
+                            { role: 'system', content: 'You are a helpful assistant for the Grace and Truth Life Care Centre website.' },
+                            ...updatedMessages,
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 500,
+                    }),
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error?.message || 'Unable to get AI response.');
+                }
+
+                aiText = data.choices?.[0]?.message?.content?.trim() || aiText;
             }
 
-            const aiText = data.choices?.[0]?.message?.content?.trim() || 'Sorry, I could not generate a reply.';
             setMessages((prev) => [...prev, { role: 'assistant', content: aiText }]);
         } catch (err) {
             setError(err.message || 'Error sending message.');
@@ -150,12 +186,12 @@ const ChatBot = () => {
                             <div ref={messagesEndRef} />
                         </div>
 
-                        {!hasOpenAIKey && (
+                        {!hasAiKey && (
                             <div className="px-4 py-3 text-sm text-slate-800 bg-amber-100 rounded-2xl border border-amber-200 mb-3">
-                                OpenAI API key is not configured yet. Please add <span className="font-semibold">VITE_OPENAI_API_KEY</span> to your local <span className="font-semibold">.env</span> file so the assistant can respond.
+                                AI API key is not configured yet. Please add <span className="font-semibold">VITE_GEMINI_API_KEY</span> or <span className="font-semibold">VITE_OPENAI_API_KEY</span> to your local <span className="font-semibold">.env.local</span> file so the assistant can respond.
                             </div>
                         )}
-                        {error && hasOpenAIKey && (
+                        {error && hasAiKey && (
                             <div className="px-4 pb-2 text-xs text-red-600 bg-red-50 border-t border-red-100">{error}</div>
                         )}
 
