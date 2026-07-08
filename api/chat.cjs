@@ -1,10 +1,10 @@
-const SYSTEM_PROMPT =
-    'You are a helpful assistant for the Grace and Truth Life Care Centre website.';
-
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
+
+    const SYSTEM_PROMPT =
+        'You are a helpful assistant for the Grace and Truth Life Care Centre website.';
 
     const geminiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
     const openaiKey = process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY;
@@ -76,4 +76,4 @@ export default async function handler(req, res) {
     } catch (err) {
         return res.status(500).json({ error: err.message || 'Error sending message.' });
     }
-}
+};
