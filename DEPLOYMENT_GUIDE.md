@@ -22,10 +22,14 @@ This is the best way to manage your project.
 1. Go to [vercel.com](https://vercel.com/) and sign in with GitHub.
 2. Click **"Add New"** > **"Project"**.
 3. Import your `church-app` repository.
-4. **IMPORTANT**: Expand the **"Environment Variables"** section and add these two:
+4. **IMPORTANT**: Expand the **"Environment Variables"** section and add these:
    - `VITE_SUPABASE_URL`: (Copy from your .env)
    - `VITE_SUPABASE_ANON_KEY`: (Copy from your .env)
+   - `GEMINI_API_KEY`: (Copy your Gemini API key from `.env.local` — needed for the LCC Assistant chatbot)
+   - Or `OPENAI_API_KEY` if you use OpenAI instead of Gemini
 5. Click **"Deploy"**.
+
+> **Note:** After adding or changing environment variables, redeploy the project so the chatbot works on the live site.
 
 ## Step 3: Your Live URL
 Once finished, Vercel will give you a link like `church-app.vercel.app`. Your app is now LIVE!
