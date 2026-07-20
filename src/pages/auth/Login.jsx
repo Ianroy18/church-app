@@ -93,16 +93,15 @@ function Login({ user, role }) {
               <div className="relative">
                 <div className="absolute inset-0 rounded-full blur-3xl bg-emerald-500/20" />
                 <img
-                  src="/lccagti.png"
-                  alt="AGTI Logo"
+                  src="/lcc1.png"
+                  alt="LCC Logo"
                   className="relative mx-auto h-28 w-28 rounded-full border border-white/10 bg-slate-950 object-cover"
                 />
               </div>
               <div>
                 <h2 className="text-3xl font-black tracking-tight text-white">Welcome to</h2>
                 <p className="mt-4 text-sm leading-7 text-slate-300">
-                  Ambassadors of Grace Training Institute (AGTI)! Equipping believers to understand the Bible,
-                  grow in God&apos;s grace, and serve others through biblical teaching, discipleship, and Christ-centered ministry.
+                  Grace and Truth Life Care Centre (LCC). Join our community for worship, discipleship, and life care programs designed to help you grow spiritually and serve others.
                 </p>
               </div>
             </div>
@@ -127,7 +126,7 @@ function Login({ user, role }) {
                   <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                   <input
                     type="email"
-                    placeholder="name@agti.com"
+                    placeholder="name@lcc.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required

@@ -153,7 +153,7 @@ const ChatBot = () => {
                             <div className="flex items-center gap-3 relative z-10">
                                 <div className="relative">
                                     <div className="w-10 h-10 bg-white rounded-full p-1.5 shadow-lg">
-                                        <img src="/favicon.png" alt="LCC Logo" className="w-full h-full object-contain" />
+                                        <img src="/lcc1.png" alt="LCC Logo" className="w-full h-full object-contain" />
                                     </div>
                                     <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#4CAF50] border-2 border-slate-900 rounded-full" />
                                 </div>
@@ -188,7 +188,7 @@ const ChatBot = () => {
                                 >
                                     {entry.role === 'assistant' && (
                                         <div className="w-7 h-7 bg-white rounded-full shadow-sm p-1 self-end border border-slate-100">
-                                            <img src="/favicon.png" alt="bot" className="w-full h-full object-contain" />
+                                            <img src="/lcc1.png" alt="LCC Bot" className="w-full h-full object-contain" />
                                         </div>
                                     )}
                                     <div className={`rounded-2xl p-4 shadow-sm border border-slate-100 max-w-[85%] ${entry.role === 'assistant' ? 'bg-white' : 'bg-[#4CAF50] text-white rounded-br-none'}`}>

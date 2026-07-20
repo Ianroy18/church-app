@@ -158,7 +158,7 @@ const Resources = () => {
 
                                 {/* 2. WATERMARK LOGO */}
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 opacity-[0.07] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
-                                    <img src="/favicon.png" alt="watermark" className="w-full h-full object-contain" />
+                                    <img src="/lcc1.png" alt="LCC watermark" className="w-full h-full object-contain" />
                                 </div>
 
                                 {/* CONTENT LAYER */}

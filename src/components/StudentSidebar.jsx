@@ -60,6 +60,7 @@ function StudentSidebar({ activeTab, setActiveTab, onLogout, isOpen = true, onCl
               </div>
             </div>
             <button
+              type="button"
               onClick={onClose}
               className="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/90 text-white transition hover:bg-slate-900"
               aria-label="Close menu"
@@ -89,6 +90,7 @@ function StudentSidebar({ activeTab, setActiveTab, onLogout, isOpen = true, onCl
             return (
               <button
                 key={id}
+                type="button"
                 onClick={() => setActiveTab(id)}
                 className="w-full relative flex items-center gap-3.5 rounded-[20px] px-4 py-3.5 text-left transition-all duration-300"
                 style={{
@@ -127,6 +129,7 @@ function StudentSidebar({ activeTab, setActiveTab, onLogout, isOpen = true, onCl
 
         <div className="px-6 pb-6 space-y-3">
           <button
+            type="button"
             onClick={onLogout}
             className="w-full flex items-center justify-center gap-2.5 rounded-[18px] border border-red-500/20 bg-red-500/10 py-3.5 text-[10px] font-black uppercase tracking-[0.25em] text-red-300 transition duration-200 hover:bg-red-500/15"
           >
@@ -139,6 +142,7 @@ function StudentSidebar({ activeTab, setActiveTab, onLogout, isOpen = true, onCl
               <p className="text-[9px] text-slate-500">{darkMode ? 'Dark' : 'Light'} Mode</p>
             </div>
             <button
+              type="button"
               onClick={() => setDarkMode(prev => !prev)}
               className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/80 text-slate-200 transition hover:bg-slate-900/90"
               aria-label="Toggle theme"

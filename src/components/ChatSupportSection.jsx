@@ -52,7 +52,7 @@ const ChatSupportSection = () => {
             <div className="relative">
               <div className="relative h-40 bg-gradient-to-br from-[#4CAF50] via-[#45a049] to-[#3d8b40] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 opacity-10">
-                  <img src="/lcc1.png" className="w-full h-full object-cover scale-150 rotate-12" alt="bg" />
+                  <img src="/lcc1.png" className="w-full h-full object-cover scale-150 rotate-12" alt="LCC background" />
                 </div>
                 <div className="absolute top-4 right-4">
                   <DialogClose className="text-white/70 hover:text-white transition-colors">

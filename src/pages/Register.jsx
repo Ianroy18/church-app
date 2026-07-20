@@ -95,16 +95,16 @@ function Register({ user, role }) {
             <div className="relative">
               <div className="absolute inset-0 rounded-full blur-2xl scale-150" style={{ background: 'rgba(34,197,94,0.2)' }} />
               <img
-                src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=100066636565507"
-                alt="Logo"
+                src="/lcc1.png"
+                alt="LCC Logo"
                 className="relative w-[64px] h-[64px] rounded-full object-cover border-2 transition-transform duration-500 group-hover:scale-110"
                 style={{ borderColor: 'rgba(34,197,94,0.5)', boxShadow: '0 0 0 4px rgba(34,197,94,0.08), 0 20px 40px rgba(0,0,0,0.5)' }}
               />
             </div>
             <div>
-              <h1 className="text-sm font-black tracking-[0.2em] uppercase text-white">Join FBS</h1>
+              <h1 className="text-sm font-black tracking-[0.2em] uppercase text-white">Join LCC</h1>
               <p className="text-[9px] font-black tracking-[0.4em] uppercase mt-0.5" style={{ color: 'rgba(253,216,53,0.7)' }}>
-                Field Bible School
+                Grace and Truth Life Care Centre
               </p>
             </div>
           </Link>
@@ -278,7 +278,7 @@ function Register({ user, role }) {
         </div>
 
         <p className="text-center text-[9px] font-black tracking-[0.4em] uppercase mt-8" style={{ color: 'rgba(255,255,255,0.1)' }}>
-          Field Bible School · Enrollment Portal
+          Grace and Truth Life Care Centre · Enrollment Portal
         </p>
       </div>
     </div>

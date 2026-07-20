@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 
 // Pages imports
 import PublicHome from './pages/PublicHome';
-import ChatBot from './components/ChatBot';
 import Resources from './pages/Resources';
 import MagazineFeed from './pages/MagazineFeed';
 import Articles from './pages/Articles';
@@ -46,7 +45,7 @@ function App() {
 
     useEffect(() => {
       const faviconLink = document.querySelector("link[rel='icon']") || document.createElement('link');
-      const nextHref = '/lccagti.png';
+      const nextHref = '/lcc1.png';
 
       faviconLink.rel = 'icon';
       faviconLink.type = 'image/png';
@@ -98,8 +97,6 @@ function App() {
           {/* Catch All */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-
-        <ChatBot />
       </AuthProvider>
     </Router>
   );

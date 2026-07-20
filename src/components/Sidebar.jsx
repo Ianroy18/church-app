@@ -23,10 +23,10 @@ export default function Sidebar({ collapsed = false, onLogout }) {
   return (
     <aside className={`hidden lg:flex lg:flex-col w-64 ${collapsed ? 'lg:w-20' : 'lg:w-64'} bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 p-4 fixed inset-y-0 left-4 rounded-2xl shadow-md`} aria-label="Main sidebar">
       <div className="flex items-center gap-3 mb-4">
-        <div className="h-12 w-12 rounded-lg bg-sky-500 flex items-center justify-center text-white font-black">AG</div>
+        <div className="h-12 w-12 rounded-lg bg-sky-500 flex items-center justify-center text-white font-black">LCC</div>
         {!collapsed && (
           <div>
-            <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">AGTI</h3>
+            <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">LCC</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">Admin Panel</p>
           </div>
         )}

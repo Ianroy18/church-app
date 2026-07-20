@@ -46,9 +46,8 @@ const TopNav = ({ onMenuClick }) => {
         <div className="w-px h-6 bg-slate-200" />
 
         <div className="flex items-center gap-3">
-          <div className="hidden sm:block text-right">
+          <div className="text-right">
             <p className="text-sm font-bold text-slate-900">{user?.name}</p>
-            <p className="text-xs text-slate-500 capitalize">{user?.role}</p>
           </div>
           <img
             src={user?.avatar}
@@ -57,15 +56,7 @@ const TopNav = ({ onMenuClick }) => {
           />
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleLogout}
-          className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition"
-          title="Logout"
-        >
-          <LogOut size={20} />
-        </motion.button>
+       
       </div>
     </motion.nav>
   );
