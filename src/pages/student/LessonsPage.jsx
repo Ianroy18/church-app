@@ -23,7 +23,7 @@ function LessonsPage({ lessons }) {
             <h3 className="font-black text-base mb-2 text-slate-900">{l.title}</h3>
             <p className="text-xs leading-relaxed flex-1 mb-5 text-slate-500">{l.description}</p>
             {l.file_url ? (
-              <a href={l.file_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[11px] font-black tracking-wider uppercase px-4 py-2.5 rounded-xl border transition-all duration-200" style={{ borderColor: 'rgba(124,58,237,0.2)', color: '#7c3aed', background: 'rgba(124,58,237,0.08)' }}>
+              <a href={l.file_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[11px] font-black tracking-wider uppercase px-4 py-2.5 rounded-xl border transition-all duration-200" style={{ borderCoFr: 'rgba(124,58,237,0.2)', color: '#7c3aed', background: 'rgba(124,58,237,0.08)' }}>
                 <FileText size={13} /> Access PDF
               </a>
             ) : (

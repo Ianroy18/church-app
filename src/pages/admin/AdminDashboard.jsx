@@ -6,11 +6,12 @@ import {
   Trash2, Award, Users, BookOpen,
   CheckCircle2, Plus, Search,
   Camera, TrendingUp, Upload, ScanLine,
-  ImagePlus, Send, Newspaper
+  ImagePlus, Send, Newspaper, Menu
 } from 'lucide-react';
 
 import { supabase } from "../../supabase";
-import AdminSidebar from "../../components/AdminSidebar";
+import Layout from '../../components/Layout';
+import AdminSidebar from '../../components/AdminSidebar';
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
@@ -42,6 +43,7 @@ function AdminDashboard({ user }) {
   const [certStudentName, setCertStudentName] = useState('');
   const [scanResult, setScanResult] = useState('');
   const [uploadLoading, setUploadLoading] = useState(false);
+  
 
   // --- MAGAZINE POSTING FUNCTION ---
   const handlePostMagazine = async (e) => {
@@ -135,7 +137,7 @@ function AdminDashboard({ user }) {
   const handleLogout = async () => {
     localStorage.removeItem('demoUser');
     await supabase.auth.signOut();
-    window.location.href = '/';
+    window.location.href = '/login';
   };
 
   const handleGenerateCert = () => {
@@ -163,10 +165,9 @@ function AdminDashboard({ user }) {
   const filteredUsers = usersList.filter(u => u.email?.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
-    <div className="flex h-screen font-sans overflow-hidden" style={{ background: '#f1f5f3' }}>
-
-      <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} handleLogout={handleLogout} />
-
+    <Layout onLogout={handleLogout} renderSidebar={({ isOpen, open, close, collapsed }) => (
+      <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} handleLogout={handleLogout} isOpen={isOpen} onClose={close} />
+    )}>
       <div className="flex-1 overflow-y-auto p-4 pl-0 min-w-0" style={{ scrollbarWidth: 'none' }}>
 
         {/* ── HEADER ── */}
@@ -338,7 +339,7 @@ function AdminDashboard({ user }) {
 
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
 

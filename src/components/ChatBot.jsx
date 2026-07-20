@@ -8,6 +8,7 @@ const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 const isDev = import.meta.env.DEV;
 const hasLocalAiKey = Boolean(GEMINI_API_KEY || OPENAI_API_KEY);
 const usesGemini = Boolean(GEMINI_API_KEY);
+const hasAiKey = isDev ? hasLocalAiKey : true;
 
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -132,7 +133,6 @@ const ChatBot = () => {
     };
 
     return (
-        /* Main Wrapper: Inangat ang z-index sa 999 at ginawang responsive ang spacing */
         <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[999] flex flex-col items-end font-['Montserrat']">
 
             {/* CHAT WINDOW */}
@@ -142,8 +142,7 @@ const ChatBot = () => {
                         initial={{ opacity: 0, y: 20, scale: 0.9, transformOrigin: "bottom right" }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.9 }}
-                        /* Width: calc(100vw - 32px) para hindi lumampas sa mobile screen side-to-side */
-                        /* Height: h-[70vh] para mag-adjust sa height ng phone */
+
                         className="mb-4 w-[calc(100vw-32px)] sm:w-[320px] md:w-[360px] bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 overflow-hidden flex flex-col h-[70vh] md:h-[480px]"
                     >
                         {/* Compact Premium Header */}
@@ -202,12 +201,12 @@ const ChatBot = () => {
                             <div ref={messagesEndRef} />
                         </div>
 
-                        {isDev && !hasLocalAiKey && (
+                        {!hasAiKey && (
                             <div className="px-4 py-3 text-sm text-slate-800 bg-amber-100 rounded-2xl border border-amber-200 mb-3">
                                 AI API key is not configured yet. Please add <span className="font-semibold">VITE_GEMINI_API_KEY</span> or <span className="font-semibold">VITE_OPENAI_API_KEY</span> to your local <span className="font-semibold">.env.local</span> file so the assistant can respond.
                             </div>
                         )}
-                        {error && (
+                        {error && hasAiKey && (
                             <div className="px-4 pb-2 text-xs text-red-600 bg-red-50 border-t border-red-100">{error}</div>
                         )}
 

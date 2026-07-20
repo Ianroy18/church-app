@@ -7,6 +7,7 @@ import PublicHome from './pages/PublicHome';
 import Login from './pages/auth/Login';
 import Register from './pages/Register';
 import StudentDashboard from './pages/StudentDashboard';
+import TeacherDashboard from './pages/TeacherDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ChatBot from './components/ChatBot';
 import Resources from './pages/Resources';
@@ -23,6 +24,7 @@ import NextStepsNewHere from './pages/NextStepsNewHere';
 import NextStepsJoinDGroup from './pages/NextStepsJoinDGroup';
 import NextStepsStartServing from './pages/NextStepsStartServing';
 import AdminContentManager from './pages/AdminContentManager';
+import Settings from './pages/Settings';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -102,16 +104,37 @@ function App() {
     return null;
   };
 
-  const ProtectedRoute = ({ children, requireAdmin, requireStudent }) => {
+  const FaviconController = () => {
+    const location = useLocation();
+
+    useEffect(() => {
+      const faviconLink = document.querySelector("link[rel='icon']") || document.createElement('link');
+      const nextHref = '/lccagti.png';
+
+      faviconLink.rel = 'icon';
+      faviconLink.type = 'image/png';
+      faviconLink.href = nextHref;
+
+      if (!document.head.contains(faviconLink)) {
+        document.head.appendChild(faviconLink);
+      }
+    }, [location.pathname]);
+
+    return null;
+  };
+
+  const ProtectedRoute = ({ children, requireAdmin, requireStudent, requireTeacher }) => {
     if (!user) return <Navigate to="/login" />;
-    if (requireAdmin && role !== 'admin') return <Navigate to="/dashboard" />;
-    if (requireStudent && role !== 'student') return <Navigate to="/admin" />;
+    if (requireAdmin && role !== 'admin') return <Navigate to="/login" />;
+    if (requireStudent && role !== 'student') return <Navigate to="/login" />;
+    if (requireTeacher && role !== 'teacher') return <Navigate to="/login" />;
     return children;
   };
 
   return (
     <Router>
       <ScrollToHash />
+      <FaviconController />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<PublicHome />} />
@@ -134,21 +157,29 @@ function App() {
         {/* Protected Student Routes */}
         <Route path="/dashboard" element={
           <ProtectedRoute requireStudent={true}>
-            <StudentDashboard user={user} />
+            <StudentDashboard user={user} role={role} />
+          </ProtectedRoute>
+        } />
+
+        {/* Protected Teacher Routes */}
+        <Route path="/teacher" element={
+          <ProtectedRoute requireTeacher={true}>
+            <TeacherDashboard user={user} role={role} />
           </ProtectedRoute>
         } />
 
         {/* Protected Admin Routes */}
         <Route path="/admin" element={
           <ProtectedRoute requireAdmin={true}>
-            <AdminDashboard user={user} />
+            <AdminDashboard user={user} role={role} />
           </ProtectedRoute>
         } />
         <Route path="/admin/content" element={
           <ProtectedRoute requireAdmin={true}>
-            <AdminContentManager />
+            <AdminContentManager user={user} role={role} />
           </ProtectedRoute>
         } />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
         {/* Catch All */}
         <Route path="*" element={<Navigate to="/" />} />

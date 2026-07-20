@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BookOpen, Download, Calendar, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../supabase';
+import Layout from '../components/Layout';
 import StudentSidebar from '../components/StudentSidebar';
 import LessonsPage from './student/LessonsPage';
 import DownloadsPage from './student/DownloadsPage';
@@ -46,15 +47,15 @@ function StudentDashboard({ user }) {
   const handleLogout = async () => {
     localStorage.removeItem('demoUser');
     await supabase.auth.signOut();
-    window.location.href = '/';
+    window.location.href = '/login';
   };
 
   const username = user?.email?.split('@')[0] || 'Student';
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen font-sans overflow-hidden" style={{ background: '#f1f5f3' }}>
-      <StudentSidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
-
+    <Layout onLogout={handleLogout} renderSidebar={({ isOpen, open, close, collapsed }) => (
+      <StudentSidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} isOpen={isOpen} onClose={close} />
+    )}>
       <div className="flex-1 overflow-y-auto flex flex-col p-4 min-w-0">
         <div className="flex flex-col gap-4 mb-6 px-2">
           <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
@@ -100,7 +101,7 @@ function StudentDashboard({ user }) {
           {activeTab === 'profile' && <ProfilePage user={user} />}
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
 
