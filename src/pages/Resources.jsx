@@ -3,7 +3,6 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import * as LucideIcons from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import ChatBot from '../components/ChatBot';
 
 const Resources = () => {
     const { hash } = useLocation();
@@ -271,7 +270,6 @@ const Resources = () => {
             </section>
 
             <Footer />
-            <ChatBot />
         </div>
     );
 };

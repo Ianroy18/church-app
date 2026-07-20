@@ -31,12 +31,8 @@ const Navbar = () => {
         {
             title: "Watch",
             links: [
-                { name: "Online Service (Sundays)", href: "#" },
                 { name: "Video On Demand", href: "https://web.facebook.com/LifeCareCenterCDO/videos" },
-                { name: "Broadcast Channels", href: "#" },
-                { name: "Runthrough", href: "#" },
-                { name: "Podcast", href: "#" },
-                { name: "Spotify", href: "#" },
+                { name: "Visit Our Contact Page", href: "/#contact" },
             ]
         },
         {
@@ -56,9 +52,7 @@ const Navbar = () => {
         {
             title: "Discipleship",
             links: [
-                { name: "Discipleship Journey", href: "/#discipleship" }, // Halimbawa
-                { name: "DMembers Corner", href: "#" },
-                { name: "DLeaders Corner", href: "#" },
+                { name: "Discipleship Journey", href: "/#discipleship" },
             ]
         }
     ];
